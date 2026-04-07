@@ -1,0 +1,1295 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Student Hub — Project Plan v2</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #080C18;
+    --bg2: #0D1224;
+    --bg3: #131929;
+    --border: rgba(255,255,255,0.07);
+    --gold: #F4C553;
+    --gold-dim: rgba(244,197,83,0.15);
+    --teal: #3DD6C8;
+    --rose: #FF6B7A;
+    --purple: #9B7CF4;
+    --blue: #4A9EFF;
+    --green: #52D48A;
+    --orange: #FF9F4A;
+    --cyan: #4AC8FF;
+    --text: #E8EAF0;
+    --muted: #6B738A;
+    --accent-border: rgba(244,197,83,0.3);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    line-height: 1.7;
+    min-height: 100vh;
+  }
+  body::before {
+    content:'';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.4;
+  }
+  .wrapper { position: relative; z-index: 1; max-width: 980px; margin: 0 auto; padding: 60px 24px 120px; }
+
+  .header { margin-bottom: 56px; border-left: 3px solid var(--gold); padding-left: 24px; }
+  .header-tag { font-size: 11px; letter-spacing: 0.2em; color: var(--gold); text-transform: uppercase; margin-bottom: 10px; }
+  .header h1 { font-family: 'Syne', sans-serif; font-weight: 800; font-size: clamp(30px, 5vw, 50px); line-height: 1.1; color: #fff; margin-bottom: 8px; }
+  .header h1 span { color: var(--gold); }
+  .header-sub { color: var(--muted); font-size: 12px; margin-top: 14px; }
+  .rainbow-bar { height: 2px; width: 100%; margin-top: 16px; background: linear-gradient(90deg, #9B7CF4,#3DD6C8,#FF6B7A,#4A9EFF,#52D48A,#FF9F4A,#4AC8FF,#F4C553,#9B7CF4); }
+
+  /* STACK BADGES */
+  .stack-row { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 48px; }
+  .stack-pill {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 5px 12px; border-radius: 2px; font-size: 10px;
+    letter-spacing: 0.08em; text-transform: uppercase; font-weight: 500;
+    border: 1px solid;
+  }
+  .sp-red    { background: rgba(255,107,122,0.08); color: #FF6B7A; border-color: rgba(255,107,122,0.2); }
+  .sp-blue   { background: rgba(74,158,255,0.08); color: #4A9EFF; border-color: rgba(74,158,255,0.2); }
+  .sp-teal   { background: rgba(61,214,200,0.08); color: #3DD6C8; border-color: rgba(61,214,200,0.2); }
+  .sp-purple { background: rgba(155,124,244,0.08); color: #9B7CF4; border-color: rgba(155,124,244,0.2); }
+  .sp-green  { background: rgba(82,212,138,0.08); color: #52D48A; border-color: rgba(82,212,138,0.2); }
+  .sp-orange { background: rgba(255,159,74,0.08); color: #FF9F4A; border-color: rgba(255,159,74,0.2); }
+  .sp-cyan   { background: rgba(74,200,255,0.08); color: #4AC8FF; border-color: rgba(74,200,255,0.2); }
+  .sp-gold   { background: rgba(244,197,83,0.08); color: #F4C553; border-color: rgba(244,197,83,0.2); }
+
+  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 4px; margin-bottom: 48px; overflow: hidden; }
+  .stat { background: var(--bg2); padding: 18px 16px; }
+  .stat-label { font-size: 10px; color: var(--muted); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 6px; }
+  .stat-value { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 700; color: var(--gold); }
+  .stat-unit { font-size: 11px; color: var(--muted); }
+
+  /* NOTE BOX */
+  .note-box { padding: 14px 18px; background: rgba(255,159,74,0.06); border: 1px solid rgba(255,159,74,0.2); border-radius: 4px; margin-bottom: 40px; font-size: 12px; color: #B0B8C8; line-height: 1.8; }
+  .note-box strong { color: var(--orange); }
+
+  .legend { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 36px; padding: 14px 18px; background: var(--bg2); border: 1px solid var(--border); border-radius: 4px; align-items: center; }
+  .legend-label { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; margin-right: 4px; }
+  .badge { display: inline-flex; align-items: center; gap: 5px; padding: 3px 10px; border-radius: 2px; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 500; }
+  .badge-dot { width: 5px; height: 5px; border-radius: 50%; }
+  .badge.theory  { background: rgba(155,124,244,0.12); color: var(--purple); }
+  .badge.theory .badge-dot  { background: var(--purple); }
+  .badge.build   { background: rgba(61,214,200,0.1);  color: var(--teal); }
+  .badge.build .badge-dot   { background: var(--teal); }
+  .badge.devops  { background: rgba(74,158,255,0.1);  color: var(--blue); }
+  .badge.devops .badge-dot  { background: var(--blue); }
+  .badge.milestone { background: rgba(244,197,83,0.12); color: var(--gold); }
+  .badge.milestone .badge-dot { background: var(--gold); }
+
+  /* PHASE */
+  .phase { margin-bottom: 4px; border: 1px solid var(--border); border-radius: 4px; overflow: hidden; transition: border-color 0.2s; }
+  .phase:hover { border-color: rgba(255,255,255,0.13); }
+  .phase.open { border-color: var(--accent-border); }
+  .phase-header { display: grid; grid-template-columns: 56px 1fr auto; align-items: center; gap: 16px; padding: 16px 20px; cursor: pointer; background: var(--bg2); user-select: none; transition: background 0.15s; }
+  .phase-header:hover { background: var(--bg3); }
+  .phase.open .phase-header { background: var(--bg3); }
+  .phase-num { font-family: 'Syne', sans-serif; font-size: 26px; font-weight: 800; color: var(--border); line-height: 1; }
+  .phase-name { font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700; color: #fff; margin-bottom: 3px; }
+  .phase-meta { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+  .phase-days { font-size: 11px; color: var(--muted); }
+  .phase-color-bar { height: 3px; border-radius: 2px; width: 100%; margin-top: 8px; }
+  .phase-toggle { font-size: 18px; color: var(--muted); transition: transform 0.2s, color 0.2s; padding: 4px; }
+  .phase.open .phase-toggle { transform: rotate(180deg); color: var(--gold); }
+  .phase-body { display: none; border-top: 1px solid var(--border); }
+  .phase.open .phase-body { display: block; }
+
+  /* CONCEPT BOX */
+  .concept-box { padding: 18px 22px; background: var(--bg); border-bottom: 1px solid var(--border); }
+  .concept-title { font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold); margin-bottom: 10px; }
+  .concept-text { color: #9BA3BA; font-size: 12px; line-height: 1.9; }
+  .concept-text strong { color: var(--text); }
+
+  /* DAYS */
+  .day-row { display: grid; grid-template-columns: 80px 1fr; border-bottom: 1px solid var(--border); transition: background 0.1s; }
+  .day-row:last-child { border-bottom: none; }
+  .day-row:hover { background: rgba(255,255,255,0.02); }
+  .day-num-col { display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding: 14px 8px; border-right: 1px solid var(--border); gap: 5px; }
+  .day-label { font-size: 9px; color: var(--muted); letter-spacing: 0.12em; text-transform: uppercase; }
+  .day-number { font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 700; color: var(--muted); line-height: 1; }
+  .day-row.milestone-day .day-number { color: var(--gold); }
+  .day-type-dot { width: 7px; height: 7px; border-radius: 50%; margin-top: 4px; }
+  .day-content-col { padding: 13px 20px; }
+  .day-title { font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 600; color: #fff; margin-bottom: 6px; }
+  .day-tasks { list-style: none; color: #8A93A8; font-size: 11.5px; }
+  .day-tasks li { padding: 2px 0; display: flex; gap: 8px; align-items: flex-start; }
+  .day-tasks li::before { content: '→'; color: var(--muted); flex-shrink: 0; margin-top: 1px; }
+  .day-tasks li strong { color: var(--text); }
+  .tip-box { margin-top: 10px; padding: 8px 12px; background: rgba(244,197,83,0.05); border-left: 2px solid var(--gold); font-size: 11px; color: #9BA3BA; }
+  .tip-box strong { color: var(--gold); }
+  .warn-box { margin-top: 10px; padding: 8px 12px; background: rgba(255,107,122,0.05); border-left: 2px solid var(--rose); font-size: 11px; color: #9BA3BA; }
+  .warn-box strong { color: var(--rose); }
+  .milestone-banner { background: rgba(244,197,83,0.06); border: 1px solid rgba(244,197,83,0.2); border-radius: 3px; padding: 10px 14px; margin-top: 10px; font-size: 11px; color: var(--gold); display: flex; align-items: center; gap: 8px; }
+
+  /* PHASE COLORS */
+  .ph0 .phase-color-bar { background: var(--purple); }
+  .ph0 .phase.open { border-color: rgba(155,124,244,0.35); }
+  .ph0 .phase.open .phase-num { color: var(--purple); }
+
+  .ph1 .phase-color-bar { background: var(--teal); }
+  .ph1 .phase.open { border-color: rgba(61,214,200,0.35); }
+  .ph1 .phase.open .phase-num { color: var(--teal); }
+
+  .ph2 .phase-color-bar { background: var(--rose); }
+  .ph2 .phase.open { border-color: rgba(255,107,122,0.35); }
+  .ph2 .phase.open .phase-num { color: var(--rose); }
+
+  .ph3 .phase-color-bar { background: var(--blue); }
+  .ph3 .phase.open { border-color: rgba(74,158,255,0.35); }
+  .ph3 .phase.open .phase-num { color: var(--blue); }
+
+  .ph4 .phase-color-bar { background: var(--green); }
+  .ph4 .phase.open { border-color: rgba(82,212,138,0.35); }
+  .ph4 .phase.open .phase-num { color: var(--green); }
+
+  .ph5 .phase-color-bar { background: var(--orange); }
+  .ph5 .phase.open { border-color: rgba(255,159,74,0.35); }
+  .ph5 .phase.open .phase-num { color: var(--orange); }
+
+  .ph6 .phase-color-bar { background: var(--cyan); }
+  .ph6 .phase.open { border-color: rgba(74,200,255,0.35); }
+  .ph6 .phase.open .phase-num { color: var(--cyan); }
+
+  .ph7 .phase-color-bar { background: var(--gold); }
+  .ph7 .phase.open { border-color: rgba(244,197,83,0.35); }
+  .ph7 .phase.open .phase-num { color: var(--gold); }
+
+  .ph8 .phase-color-bar { background: linear-gradient(90deg,#4A9EFF,#52D48A); }
+  .ph8 .phase.open { border-color: rgba(74,158,255,0.35); }
+  .ph8 .phase.open .phase-num { color: var(--blue); }
+
+  .ph9 .phase-color-bar { background: linear-gradient(90deg,var(--purple),var(--gold)); }
+  .ph9 .phase.open { border-color: rgba(244,197,83,0.35); }
+  .ph9 .phase.open .phase-num { color: var(--gold); }
+
+  code { background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 2px; font-size: 10.5px; color: #B8C0D8; }
+
+  .footer { margin-top: 80px; padding-top: 28px; border-top: 1px solid var(--border); color: var(--muted); font-size: 11px; }
+
+  @media(max-width:600px) {
+    .day-row { grid-template-columns: 60px 1fr; }
+    .stats { grid-template-columns: 1fr 1fr; }
+    .phase-header { grid-template-columns: 36px 1fr auto; gap: 10px; }
+    .phase-num { font-size: 18px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrapper">
+
+  <div class="header">
+    <div class="header-tag">// Portfolio Project — Piano Operativo v2</div>
+    <h1>YouStudent <span>Hub</span></h1>
+    <div class="header-sub">Angular · NestJS · PostgreSQL · MongoDB · Redis · Braintree/PayPal · AWS · Docker (tardivo) · CI/CD GitLab</div>
+    <div class="rainbow-bar"></div>
+  </div>
+
+  <div class="stack-row">
+    <span class="stack-pill sp-red">Angular 18</span>
+    <span class="stack-pill sp-blue">NestJS</span>
+    <span class="stack-pill sp-teal">Node.js 20</span>
+    <span class="stack-pill sp-purple">TypeScript</span>
+    <span class="stack-pill sp-green">PostgreSQL</span>
+    <span class="stack-pill sp-green">MongoDB</span>
+    <span class="stack-pill sp-orange">Redis</span>
+    <span class="stack-pill sp-cyan">BullMQ</span>
+    <span class="stack-pill sp-gold">Braintree · PayPal</span>
+    <span class="stack-pill sp-blue">AWS S3 · CloudFront</span>
+    <span class="stack-pill sp-blue">AWS ECS · ALB</span>
+    <span class="stack-pill sp-purple">Docker · GitLab CI</span>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><div class="stat-label">Giorni totali</div><div class="stat-value">~138</div><div class="stat-unit">giorni lavorativi</div></div>
+    <div class="stat"><div class="stat-label">Ore totali</div><div class="stat-value">~552</div><div class="stat-unit">ore a 4h/giorno</div></div>
+    <div class="stat"><div class="stat-label">Fasi</div><div class="stat-value">10</div><div class="stat-unit">macro-aree</div></div>
+    <div class="stat"><div class="stat-label">Docker</div><div class="stat-value">Fase 8</div><div class="stat-unit">introdotto tardi</div></div>
+    <div class="stat"><div class="stat-label">Pagamenti</div><div class="stat-value">Braintree</div><div class="stat-unit">cards + PayPal</div></div>
+  </div>
+
+  <div class="note-box">
+    <strong>⚡ Note sulle scelte architetturali</strong><br><br>
+    <p>per ora nulla</p>
+  </div>
+
+  <div class="legend">
+    <span class="legend-label">Tipo →</span>
+    <span class="badge theory"><span class="badge-dot"></span>Studio/Teoria</span>
+    <span class="badge build"><span class="badge-dot"></span>Implementazione</span>
+    <span class="badge devops"><span class="badge-dot"></span>DevOps/Infra</span>
+    <span class="badge milestone"><span class="badge-dot"></span>Milestone</span>
+  </div>
+
+  <!-- ===== PHASE 00 ===== -->
+  <div class="ph0">
+  <div class="phase" id="ph0">
+    <div class="phase-header" onclick="toggle('ph0')">
+      <div class="phase-num">00</div>
+      <div class="phase-info">
+        <div class="phase-name">Fondamenta — Setup Locale, TypeScript, Architettura</div>
+        <div class="phase-meta"><span class="phase-days">Giorni 1–6 · 6 giorni</span><span class="badge theory"><span class="badge-dot"></span>Setup</span></div>
+        <div class="phase-color-bar"></div>
+      </div>
+      <div class="phase-toggle">▾</div>
+    </div>
+    <div class="phase-body">
+      <div class="concept-box">
+        <div class="concept-title">// Obiettivo della fase</div>
+        <div class="concept-text">Prima di scrivere codice di business, hai bisogno di un ambiente stabile e di un'architettura chiara in testa. Il focus di questa fase è <strong>TypeScript</strong> (usato sia da NestJS che da Angular — devi padroneggiarlo bene prima) e il setup dei soli servizi infrastrutturali via Docker, senza containerizzare l'app.</div>
+      </div>
+      <div class="days-list">
+
+        <div class="day-row">
+          <div class="day-num-col"><span class="day-label">giorno</span><span class="day-number">1</span><span class="day-type-dot" style="background:var(--purple)"></span></div>
+          <div class="day-content-col">
+            <div class="day-title">Architettura & Strumenti</div>
+            <ul class="day-tasks">
+              <li>Disegna l'architettura su carta o Excalidraw: Angular SPA → NestJS API → PostgreSQL + MongoDB + Redis → S3 → Braintree</li>
+              <li>Installa: <strong>Node.js 20, VS Code, Git, Postman, MongoDB Compass, pgAdmin o DBeaver</strong></li>
+              <li>Struttura monorepo: <code>YouStudent-hub/backend/</code>, <code>frontend/</code>, <code>infra/</code></li>
+              <li>Inizializza il repo Git con .gitignore per Node, aggiungi <code>.env.example</code></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="day-row">
+          <div class="day-num-col"><span class="day-label">giorno</span><span class="day-number">2</span><span class="day-type-dot" style="background:var(--purple)"></span></div>
+          <div class="day-content-col">
+            <div class="day-title">TypeScript — Fondamentali (parte 1)</div>
+            <ul class="day-tasks">
+              <li><strong>Studia (4h):</strong> tipizzazione statica, <code>interface</code> vs <code>type</code>, <code>enum</code>, <code>generics</code> di base <code>&lt;T&gt;</code>, <code>readonly</code>, <code>optional chaining (?.)` </code></li>
+              <li>Esercizi: riscrivi in TS una classe JavaScript che conosci già (es. un service CRUD)</li>
+              <li>Capire perché TypeScript è fondamentale per NestJS — tutto il framework è costruito su decoratori TS</li>
+            </ul>
+            <div class="tip-box"><strong>💡 TypeScript non è opzionale qui:</strong> NestJS usa pesantemente decoratori (<code>@Controller</code>, <code>@Injectable</code>, <code>@Body</code>) che sono una feature TypeScript sperimentale ma stabile. Senza capire bene TS, NestJS sembrerà magia nera.</div>
+          </div>
+        </div>
+
+        <div class="day-row">
+          <div class="day-num-col"><span class="day-label">giorno</span><span class="day-number">3</span><span class="day-type-dot" style="background:var(--purple)"></span></div>
+          <div class="day-content-col">
+            <div class="day-title">TypeScript — Avanzato (parte 2)</div>
+            <ul class="day-tasks">
+              <li><strong>Studia (4h):</strong> <code>decoratori</code> (class e method decorator), <code>Partial&lt;T&gt;</code> / <code>Pick&lt;T&gt;</code> / <code>Omit&lt;T&gt;</code>, <code>union types</code>, <code>type guards</code>, <code>abstract class</code></li>
+              <li>Esercizio pratico: scrivi un decoratore custom <code>@Log</code> che logga gli argomenti di un metodo</li>
+              <li>Capire <code>tsconfig.json</code>: <code>strict</code>, <code>experimentalDecorators</code>, <code>emitDecoratorMetadata</code> — queste opzioni NestJS le abilita di default</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="day-row">
+          <div class="day-num-col"><span class="day-label">giorno</span><span class="day-number">4</span><span class="day-type-dot" style="background:var(--blue)"></span></div>
+          <div class="day-content-col">
+            <div class="day-title">Database Locali — Docker Compose solo per infrastruttura</div>
+            <ul class="day-tasks">
+              <li>Crea <code>infra/docker-compose.yml</code> con solo 3 servizi: <strong>postgres:16</strong>, <strong>mongo:7</strong>, <strong>redis:7</strong></li>
+              <li>Configura volumi per la persistenza dei dati, esponi le porte standard (5432, 27017, 6379)</li>
+              <li><code>docker-compose up -d</code> — i database girano, la tua app no (quella la installerai localmente)</li>
+              <li>Verifica la connessione con pgAdmin, MongoDB Compass e <code>redis-cli</code></li>
+            </ul>
+            <div class="tip-box"><strong>💡 Perché Docker solo per i DB:</strong> installare PostgreSQL 16, MongoDB 7 e Redis 7 localmente su diversi OS è un'odissea di conflitti. Docker risolve questo in un comando. L'app la tieni locale per ora — hot-reload più veloce, debug più semplice.</div>
+          </div>
+        </div>
+
+        <div class="day-row">
+          <div class="day-num-col"><span class="day-label">giorno</span><span class="day-number">5</span><span class="day-type-dot" style="background:var(--purple)"></span></div>
+          <div class="day-content-col">
+            <div class="day-title">PostgreSQL vs MySQL & NoSQL vs SQL — Studio comparativo</div>
+            <ul class="day-tasks">
+              <li><strong>PostgreSQL vs MySQL (1.5h):</strong> PG ha tipi JSONB nativi (indici su JSON!), UUID nativo, conformità ACID più rigorosa, array columns, window functions più potenti. MySQL è più semplice ma meno espressivo. Per una piattaforma di e-learning PG vince.</li>
+              <li><strong>MongoDB vs PostgreSQL (1.5h):</strong> MongoDB non ha schema fisso — ideale per il contenuto delle lezioni (ogni lezione può avere strutture diverse: video+quiz, solo testo, solo codice). PostgreSQL è ideale per relazioni forti (utenti, ordini, iscrizioni). Usarli insieme è la scelta corretta, non un eccesso.</li>
+              <li>Esegui query di esempio su entrambi i DB per familiarizzare con le sintassi</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="day-row milestone-day">
+          <div class="day-num-col"><span class="day-label">giorno</span><span class="day-number">6</span><span class="day-type-dot" style="background:var(--gold)"></span></div>
+          <div class="day-content-col">
+            <div class="day-title">Schema DB & Architettura Definitiva</div>
+            <ul class="day-tasks">
+              <li>Disegna il diagramma ER completo: <code>users</code>, <code>courses</code>, <code>lessons</code>, <code>enrollments</code>, <code>reviews</code>, <code>certificates</code>, <code>payments</code>, <code>categories</code></li>
+              <li>Definisci cosa va in PostgreSQL e cosa in MongoDB — ogni scelta deve avere una motivazione</li>
+              <li>Definisci le API RESTful principali (metodo + path + payload) prima di implementarle</li>
+            </ul>
+            <div class="milestone-banner">🎯 MILESTONE: ambiente pronto, TypeScript padroneggiato, schema DB progettato. Si costruisce.</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  </div>
+
+  <!-- ===== PHASE 01 ===== -->
+  <div class="ph1">
+  <div class="phase" id="ph1">
+    <div class="phase-header" onclick="toggle('ph1')">
+      <div class="phase-num">01</div>
+      <div class="phase-info">
+        <div class="phase-name">NestJS — Core Concepts & Backend API</div>
+        <div class="phase-meta"><span class="phase-days">Giorni 7–34 · 28 giorni</span><span class="badge build"><span class="badge-dot"></span>Studio + Implementazione</span></div>
+        <div class="phase-color-bar"></div>
+      </div>
+      <div class="phase-toggle">▾</div>
+    </div>
+    <div class="phase-body">
+      <div class="concept-box">
+        <div class="concept-title">// I building block di NestJS — impararli nell'ordine giusto</div>
+        <div class="concept-text">
+          NestJS ha un'architettura fortemente ispirata ad Angular (moduli, dependency injection, decoratori). I concetti vanno imparati in questo ordine:<br><br>
+          <strong>Module:</strong> unità organizzativa. Ogni feature è un modulo (<code>UsersModule</code>, <code>CoursesModule</code>). Il modulo radice è <code>AppModule</code>. I moduli dichiarano cosa esportano e cosa importano da altri moduli.<br><br>
+          <strong>Controller:</strong> gestisce le richieste HTTP. Mappa i path (<code>@Get('/courses')</code>), estrae parametri (<code>@Param</code>, <code>@Body</code>, <code>@Query</code>), delega la logica al Service.<br><br>
+          <strong>Service:</strong> contiene tutta la logica di business. È <code>@Injectable()</code> — NestJS gestisce il suo ciclo di vita e lo inietta dove serve (dependency injection).<br><br>
+          <strong>DTO (Data Transfer Object):</strong> classe TypeScript che descrive la forma dei dati in ingresso. Usata con <code>class-validator</code> per la validazione automatica.<br><br>
+          <strong>Pipe:</strong> trasforma o valida i dati <em>prima</em> che arrivino al controller. La <code>ValidationPipe</code> globale usa i DTO per validare automaticamente ogni richiesta.<br><br>
+          <strong>Guard:</strong> decide se una richiesta può procedere. Esempio: <code>JwtAuthGuard</code> verifica che il token JWT sia valido. Se il guard ritorna <code>false</code>, NestJS risponde automaticamente 401/403.<br><br>
+          <strong>Interceptor:</strong> wrappa la richiesta/risposta. Usi: logging, trasformazione della risposta, caching, timeout globale.
+        </div>
+      </div>
+      <div class="days-list">
+
+        <div class="day-row">
+          <div class="day-num-col"><span class="day-label">giorno</span><span class="day-number">7</span><span class="day-type-dot" style="background:var(--purple)"></span></div>
+          <div class="day-content-col">
+            <div class="day-title">NestJS — Installazione & Primo Progetto</div>
+            <ul class="day-tasks">
+              <li><strong>Studia (1.5h):</strong> leggi la documentazione NestJS — First Steps, Controllers, Providers. Capisci come il framework è strutturato prima di usarlo.</li>
+              <li>Installa la CLI: <code>npm i -g @nestjs/cli</code> e crea il progetto: <code>nest new backend</code></li>
+              <li>Esplora la struttura generata: <code>app.module.ts</code>, <code>app.controller.ts</code>, <code>app.service.ts</code></li>
+              <li>Aggiungi un endpoint custom <code>GET /health</code> che restituisce <code>{"status":"ok","timestamp":"..."}</code> — ti servirà per l'AWS health check più avanti</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="day-row">
+          <div class="day-num-col"><span class="day-label">giorno</span><span class="day-number">8</span><span class="day-type-dot" style="background:var(--purple)"></span></div>
+          <div class="day-content-col">
+            <div class="day-title">Module System & Dependency Injection</div>
+            <ul class="day-tasks">
+              <li><strong>Studia (1.5h):</strong> come funziona il DI container di NestJS — <code>providers</code>, <code>exports</code>, <code>imports</code> nel decoratore <code>@Module()</code>. Capire perché un Service deve essere nel provider array del modulo corretto.</li>
+              <li>Crea il modulo <code>UsersModule</code> con <code>nest generate module users</code></li>
+              <li>Crea <code>UsersController</code> e <code>UsersService</code> con la CLI — osserva come vengono automaticamente registrati nel modulo</li>
+              <li>Sperimenta l'injection: inietta <code>UsersService</code> nel costruttore di <code>UsersController</code> e capisce come NestJS risolve la dipendenza</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="day-row">
+          <div class="day-num-col"><span class="day-label">giorno</span><span class="day-number">9</span><span class="day-type-dot" style="background:var(--teal)"></span></div>
+          <div class="day-content-col">
+            <div class="day-title">DTOs & ValidationPipe</div>
+            <ul class="day-tasks">
+              <li>Installa: <code>npm i class-validator class-transformer</code></li>
+              <li>Crea <code>create-user.dto.ts</code> con decoratori di validazione: <code>@IsEmail()</code>, <code>@IsString()</code>, <code>@MinLength(8)</code>, <code>@IsEnum(UserRole)</code></li>
+              <li>Abilita la <code>ValidationPipe</code> globalmente in <code>main.ts</code> con <code>whitelist: true</code> (rimuove automaticamente i campi non presenti nel DTO) e <code>transform: true</code> (converte automaticamente i tipi)</li>
+              <li>Testa con Postman: invia un payload invalido e verifica che NestJS risponda 400 con i dettagli degli errori di validazione</li>
+            </ul>
+            <div class="tip-box"><strong>💡 whitelist: true</strong> è fondamentale per la sicurezza: impedisce che dati extra nel body vengano passati al service. Un utente non può inviare <code>"isAdmin": true</code> e aspettarsi che funzioni.</div>
+          </div>
+        </div>
+
+        <div class="day-row">
+          <div class="day-num-col"><span class="day-label">giorno</span><span class="day-number">10-11</span><span class="day-type-dot" style="background:var(--teal)"></span></div>
+          <div class="day-content-col">
+            <div class="day-title">TypeORM + PostgreSQL — Entities & Migrations (2 giorni)</div>
+            <ul class="day-tasks">
+              <li>Installa: <code>@nestjs/typeorm typeorm pg</code>. Configura <code>TypeOrmModule.forRoot()</code> in <code>AppModule</code> puntando al container PostgreSQL</li>
+              <li>Crea l'entity <code>User</code> con decoratori TypeORM: <code>@Entity()</code>, <code>@Column()</code>, <code>@PrimaryGeneratedColumn('uuid')</code>, <code>@CreateDateColumn()</code></li>
+              <li>Crea una migrazione con TypeORM CLI: capire la differenza tra <code>synchronize: true</code> (solo dev, pericoloso in prod) e le migrazioni esplicite (prod)</li>
+              <li>Secondo giorno: entity <code>Course</code> con relation <code>@ManyToOne(() => User)</code> verso instructor, entity <code>Category</code>, <code>Lesson</code></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="day-row">
+          <div class="day-num-col"><span class="day-label">giorno</span><span class="day-number">12-13</span><span class="day-type-dot" style="background:var(--teal)"></span></div>
+          <div class="day-content-col">
+            <div class="day-title">Repository Pattern & CRUD Courses (2 giorni)</div>
+            <ul class="day-tasks">
+              <li>Usa <code>@InjectRepository(Course)</code> nel CoursesService per avere accesso al repository TypeORM</li>
+              <li>Implementa tutti i metodi CRUD: <code>findAll()</code> con paginazione e filtri, <code>findBySlug()</code>, <code>create()</code>, <code>update()</code>, <code>remove()</code></li>
+              <li>CoursesController con tutti gli endpoint REST mappati ai metodi del service</li>
+              <li>Aggiungi <code>@nestjs/swagger</code> e decora i DTO e i controller — genera automaticamente la documentazione OpenAPI su <code>/api/docs</code></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="day-row">
+          <div class="day-num-col"><span class="day-label">giorno</span><span class="day-number">14-15</span><span class="day-type-dot" style="background:var(--teal)"></span></div>
+          <div class="day-content-col">
+            <div class="day-title">Mongoose + MongoDB — Lesson Content (2 giorni)</div>
+            <ul class="day-tasks">
+              <li>Installa <code>@nestjs/mongoose mongoose</code>. Configura <code>MongooseModule.forRoot()</code> in <code>AppModule</code></li>
+              <li>Crea lo Schema Mongoose <code>LessonContent</code>: <code>lessonId</code> (FK verso PostgreSQL), <code>videoUrl</code>, <code>transcript</code>, <code>attachments</code>, <code>quiz: [{question, options, correctAnswer, explanation}]</code></li>
+              <li>Service che gestisce il documento MongoDB e il riferimento (content_id) salvato su PostgreSQL</li>
+              <li>Endpoint <code>GET /lessons/:id/content</code>: fonde dati da PostgreSQL + MongoDB in una singola risposta</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="day-row">
+          <div class="day-num-col"><span class="day-label">giorno</span><span class="day-number">16-17</span><span class="day-type-dot" style="background:var(--teal)"></span></div>
+          <div class="day-content-col">
+            <div class="day-title">Interceptors — Response Transform & Logging (2 giorni)</div>
+            <ul class="day-tasks">
+              <li><strong>Studia (1h):</strong> il ciclo di vita di un Interceptor in NestJS — pre-handler e post-handler con RxJS <code>tap()</code> e <code>map()</code></li>
+              <li>Crea un <code>TransformInterceptor</code> globale che wrappa tutte le risposte in: <code>{"data": ..., "statusCode": 200, "timestamp": "..."}</code></li>
+              <li>Crea un <code>LoggingInterceptor</code>: logga method, path, status code e tempo di risposta per ogni richiesta</li>
+              <li>Crea un <code>TimeoutInterceptor</code>: se un endpoint non risponde entro 10 secondi, ritorna 504</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="day-row">
+          <div class="day-num-col"><span class="day-label">giorno</span><span class="day-number">18-19</span><span class="day-type-dot" style="background:var(--teal)"></span></div>
+          <div class="day-content-col">
+            <div class="day-title">Exception Filters & Error Handling (2 giorni)</div>
+            <ul class="day-tasks">
+              <li><strong>Studia (1h):</strong> le eccezioni built-in di NestJS (<code>NotFoundException</code>, <code>ForbiddenException</code>, <code>ConflictException</code>, ecc.) — quando usare ognuna</li>
+              <li>Crea un <code>HttpExceptionFilter</code> globale che standardizza il formato di TUTTI gli errori: <code>{"error": "NOT_FOUND", "message": "...", "statusCode": 404, "path": "..."}</code></li>
+              <li>Gestisci anche gli errori di TypeORM (es. violazione di unique constraint) — trasformali in <code>ConflictException</code> invece di lasciare passare un errore 500</li>
+              <li>Testa ogni tipo di errore con Postman e verifica la consistenza della risposta</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="day-row">
+          <div class="day-num-col"><span class="day-label">giorno</span><span class="day-number">20-22</span><span class="day-type-dot" style="background:var(--teal)"></span></div>
+          <div class="day-content-col">
+            <div class="day-title">Enrollment, Review, Certificate — API Complete (3 giorni)</div>
+            <ul class="day-tasks">
+              <li>Genera tutti i moduli, controller, service, DTO per enrollments, reviews, certificates con la NestJS CLI</li>
+              <li>Logica di enrollement: verifica che il corso sia published, che l'utente non sia già iscritto, crea l'enrollment</li>
+              <li>Logica di progresso: aggiorna la percentuale, emetti un <strong>evento interno NestJS</strong> (<code>EventEmitter2</code>) quando il progresso raggiunge il 100%</li>
+              <li>Il listener dell'evento triggera la generazione del certificato in background</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="day-row">
+          <div class="day-num-col"><span class="day-label">giorno</span><span class="day-number">23-25</span><span class="day-type-dot" style="background:var(--teal)"></span></div>
+          <div class="day-content-col">
+            <div class="day-title">Custom Pipes & Advanced Validation (3 giorni)</div>
+            <ul class="day-tasks">
+              <li><strong>Studia (1h):</strong> quando creare una Pipe custom invece di usare solo class-validator — scenari: validazione cross-field, trasformazione complessa, parsing di valori</li>
+              <li>Crea <code>ParseUuidPipe</code> custom: valida che un parametro sia un UUID valido, lancia <code>BadRequestException</code> se non lo è</li>
+              <li>Crea <code>FileSizePipe</code>: valida la dimensione di un file caricato</li>
+              <li>Applica le pipe a livello di parametro: <code>@Param('id', ParseUuidPipe)</code></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="day-row milestone-day">
+          <div class="day-num-col"><span class="day-label">giorno</span><span class="day-number">26</span><span class="day-type-dot" style="background:var(--gold)"></span></div>
+          <div class="day-content-col">
+            <div class="day-title">API Review & Documentazione Swagger</div>
+            <ul class="day-tasks">
+              <li>Revisiona tutti gli endpoint: sono consistenti? I DTO coprono tutti i casi? Gli errori sono standardizzati?</li>
+              <li>Completa la documentazione Swagger con <code>@ApiOperation</code>, <code>@ApiResponse</code>, <code>@ApiBearerAuth</code> su ogni controller</li>
+              <li>Testa ogni endpoint con Postman in modo sistematico con casi positivi e negativi</li>
+            </ul>
+            <div class="milestone-banner">🎯 MILESTONE: backend NestJS completo con tutti i building block (Module, Controller, Service, DTO, Pipe, Interceptor, Filter). API documentata.</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  </div>
+
+  <!-- ===== PHASE 02 ===== -->
+  <div class="ph2">
+  <div class="phase" id="ph2">
+    <div class="phase-header" onclick="toggle('ph2')">
+      <div class="phase-num">02</div>
+      <div class="phase-info">
+        <div class="phase-name">Auth — JWT, OAuth2, Guards & RBAC in NestJS</div>
+        <div class="phase-meta"><span class="phase-days">Giorni 27–40 · 14 giorni</span><span class="badge build"><span class="badge-dot"></span>Studio + Build</span></div>
+        <div class="phase-color-bar"></div>
+      </div>
+      <div class="phase-toggle">▾</div>
+    </div>
+    <div class="phase-body">
+      <div class="concept-box">
+        <div class="concept-title">// JWT, OAuth2 e RBAC — la triade dell'autenticazione moderna</div>
+        <div class="concept-text">
+          <strong>JWT (JSON Web Token):</strong> token firmato crittograficamente diviso in tre parti (Header.Payload.Signature). Il server lo genera al login, il client lo invia nell'header <code>Authorization: Bearer &lt;token&gt;</code>. Il server lo verifica con la chiave segreta senza query al DB — è <em>stateless</em>. Ha una scadenza (<code>exp</code>): normalmente 15 minuti per l'access token, 7 giorni per il refresh token.<br><br>
+          <strong>OAuth2:</strong> protocollo di delega dell'autenticazione. "Google certifica che questo utente è chi dice di essere." Il tuo backend riceve un token Google, lo verifica, e poi emette il proprio JWT. Non è alternativo a JWT — sono complementari.<br><br>
+          <strong>RBAC (Role-Based Access Control):</strong> ogni utente ha un ruolo (<code>student</code>, <code>instructor</code>, <code>admin</code>), ogni ruolo mappa a permessi. In NestJS si implementa con i <strong>Guards</strong> — il posto architetturalmente corretto per il controllo accessi.
+        </div>
+      </div>
+      <div class="days-list">
+
+        <div class="day-row">
+          <div class="day-num-col"><span class="day-label">giorno</span><span class="day-number">27</span><span class="day-type-dot" style="background:var(--purple)"></span></div>
+          <div class="day-content-col">
+            <div class="day-title">JWT — Teoria + Passport.js in NestJS</div>
+            <ul class="day-tasks">
+              <li><strong>Studia (2h):</strong> anatomia del JWT, algoritmo di firma HMAC-SHA256, differenza tra access e refresh token, dove conservarli (HttpOnly cookie per il refresh, memory per l'access)</li>
+              <li>Installa: <code>@nestjs/passport passport passport-jwt @nestjs/jwt bcrypt</code></li>
+              <li>Capisci come Passport.js si integra con NestJS: <code>Strategy</code> → <code>AuthGuard</code> — il Guard chiama la Strategy, la Strategy valida il token, injetta l'utente nella request</li>
+              <li>Crea <code>AuthModule</code> con <code>JwtModule.registerAsync()</code> che legge la secret dal ConfigService</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="day-row">
+          <div class="day-num-col"><span class="day-label">giorno</span><span class="day-number">28-29</span><span class="day-type-dot" style="background:var(--rose)"></span></div>
+          <div class="day-content-col">
+            <div class="day-title">Implementazione JWT + Refresh Token (2 giorni)</div>
+            <ul class="day-tasks">
+              <li>Crea <code>JwtStrategy</code> (estende <code>PassportStrategy</code>): estrae il payload dal token, verifica che l'utente esista ancora nel DB</li>
+              <li>Crea <code>JwtAuthGuard</code>: usa <code>@UseGuards(JwtAuthGuard)</code> sugli endpoint protetti — oppure applica globalmente e usa <code>@Public()</code> per le eccezioni</li>
+              <li>Endpoint <code>POST /auth/login</code>: verifica email + password (bcrypt), genera access token (15min) e refresh token (7gg)</li>
+              <li>Endpoint <code>POST /auth/refresh</code>: riceve il refresh token (da cookie HttpOnly), genera nuovo access token. Salva l'hash del refresh token nel DB per invalidarlo al logout</li>
+              <li>Endpoint <code>POST /auth/logout</code>: invalida il refresh token nel DB</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="day-row">
+          <div class="day-num-col"><span class="day-label">giorno</span><span class="day-number">30</span><span class="day-type-dot" style="background:var(--purple)"></span></div>
+          <div class="day-content-col">
+            <div class="day-title">OAuth2 — Flusso Authorization Code (Teoria)</div>
+            <ul class="day-tasks">
+              <li><strong>Studia (2h):</strong> i 4 grant types OAuth2, perché Authorization Code è il più sicuro per web app, il concetto di PKCE (Proof Key for Code Exchange) per SPA</li>
+              <li>Traccia passo per passo il flusso Google: click su "Login con Google" → redirect a Google → consenso utente → redirect con <code>?code=...</code> → backend scambia code con access_token Google → verifica identity → emette JWT proprio</li>
+              <li>Registra le app su Google Cloud Console e GitHub Developer Settings (gratuito)</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="day-row">
+          <div class="day-num-col"><span class="day-label">giorno</span><span class="day-number">31-32</span><span class="day-type-dot" style="background:var(--rose)"></span></div>
+          <div class="day-content-col">
+            <div class="day-title">OAuth2 — Implementazione Google & GitHub (2 giorni)</div>
+            <ul class="day-tasks">
+              <li>Installa <code>passport-google-oauth20 passport-github2</code></li>
+              <li>Crea <code>GoogleStrategy</code> e <code>GithubStrategy</code>: il metodo <code>validate()</code> riceve i dati del profilo social e li trasforma in un utente del tuo sistema (crea se non esiste, collega il provider se esiste)</li>
+              <li>Endpoint <code>GET /auth/google</code> → redirect a Google. Endpoint <code>GET /auth/google/callback</code> → riceve il code, chiama la strategy, emette JWT proprio e redirect al frontend</li>
+              <li>Stesso flusso per GitHub</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="day-row">
+          <div class="day-num-col"><span class="day-label">giorno</span><span class="day-number">33-34</span><span class="day-type-dot" style="background:var(--rose)"></span></div>
+          <div class="day-content-col">
+            <div class="day-title">RBAC con Decoratori Custom & Guards (2 giorni)</div>
+            <ul class="day-tasks">
+              <li>Crea il decoratore <code>@Roles(...roles)</code> usando <code>SetMetadata</code>: <code>@Roles('instructor', 'admin')</code> su un endpoint</li>
+              <li>Crea <code>RolesGuard</code>: usa <code>Reflector</code> per leggere i ruoli richiesti dai metadati del decoratore, li confronta con il ruolo dell'utente corrente</li>
+              <li>Configura l'ordine dei guard: prima <code>JwtAuthGuard</code> (autenticazione), poi <code>RolesGuard</code> (autorizzazione)</li>
+              <li>Testa tutti gli scenari: student su endpoint instructor → 403; admin su qualsiasi endpoint → 200; unauthenticated su endpoint protetto → 401</li>
+            </ul>
+            <div class="tip-box"><strong>💡 Guard vs Middleware:</strong> in NestJS usa sempre i Guard per autenticazione/autorizzazione, non i Middleware. I Guard hanno accesso al contesto di esecuzione e al Reflector (metadati dei decoratori). I Middleware sono più adatti per operazioni generiche (logging, parsing).</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  </div>
+
+  <!-- ===== PHASE 03 ===== -->
+  <div class="ph3">
+  <div class="phase" id="ph3">
+    <div class="phase-header" onclick="toggle('ph3')">
+      <div class="phase-num">03</div>
+      <div class="phase-info">
+        <div class="phase-name">Angular — SPA, PWA, Routing, State Management</div>
+        <div class="phase-meta"><span class="phase-days">Giorni 41–82 · 42 giorni</span><span class="badge build"><span class="badge-dot"></span>Studio + Implementazione</span></div>
+        <div class="phase-color-bar"></div>
+      </div>
+      <div class="phase-toggle">▾</div>
+    </div>
+    <div class="phase-body">
+      <div class="concept-box">
+        <div class="concept-title">// Angular vs React — le differenze che contano</div>
+        <div class="concept-text">
+          Già conosci React, quindi i concetti di componenti, props, stato e lifecycle non ti sono nuovi. Le differenze chiave di Angular: è un <strong>framework completo</strong> (routing, HTTP client, forms, DI — tutto incluso e integrato). Usa <strong>TypeScript nativo</strong> (non opzionale come in React). Il sistema di <strong>Dependency Injection</strong> è simile a NestJS — non casuale, sono entrambi ispirati ad Angular. I <strong>Signal</strong> (Angular 17+) rimpiazzano gradualmente RxJS per lo state management locale.<br><br>
+          <strong>PWA con Angular:</strong> Angular ha un pacchetto ufficiale <code>@angular/pwa</code> che aggiunge automaticamente Service Worker (via Workbox) e Web App Manifest. Si aggiunge con un singolo comando: <code>ng add @angular/pwa</code>.
+        </div>
+      </div>
+      <div class="days-list">
+
+        <div class="day-row">
+          <div class="day-num-col"><span class="day-label">giorno</span><span class="day-number">41-43</span><span class="day-type-dot" style="background:var(--purple)"></span></div>
+          <div class="day-content-col">
+            <div class="day-title">Angular — Fondamentali (3 giorni di studio)</div>
+            <ul class="day-tasks">
+              <li>Installa Angular CLI: <code>npm i -g @angular/cli</code>. Crea il progetto: <code>ng new frontend --standalone --routing --style=scss</code></li>
+              <li><strong>Giorno 41 — Componenti & Template:</strong> sintassi template (<code>*ngIf</code>, <code>*ngFor</code>, <code>[(ngModel)]</code>), <code>@Input()</code>, <code>@Output()</code> + EventEmitter, lifecycle hooks (<code>ngOnInit</code>, <code>ngOnDestroy</code>)</li>
+              <li><strong>Giorno 42 — Services & DI:</strong> <code>@Injectable({ providedIn: 'root' })</code>, come Angular risolve le dipendenze nel costruttore (identico a NestJS). <code>HttpClient</code> per le chiamate API.</li>
+              <li><strong>Giorno 43 — Angular Signals & RxJS base:</strong> i Signal (nuovo state management reattivo), i fondamentali di RxJS (<code>Observable</code>, <code>subscribe</code>, <code>map</code>, <code>switchMap</code>, <code>takeUntilDestroyed</code>)</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="day-row">
+          <div class="day-num-col"><span class="day-label">giorno</span><span class="day-number">44-45</span><span class="day-type-dot" style="background:var(--blue)"></span></div>
+          <div class="day-content-col">
+            <div class="day-title">Routing & Route Guards (2 giorni)</div>
+            <ul class="day-tasks">
+              <li>Configura le route principali con lazy loading per ogni feature module: <code>loadComponent</code> per le standalone components</li>
+              <li>Route annidate: <code>DashboardLayout</code> con figli <code>my-courses</code>, <code>profile</code>, <code>certificates</code></li>
+              <li>Crea <code>AuthGuard</code> (canActivate): controlla se l'utente è autenticato, altrimenti redirect a /login</li>
+              <li>Crea <code>RoleGuard</code>: legge il dato <code>data: { roles: ['instructor'] }</code> dalla route e confronta col ruolo dell'utente</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="day-row">
+          <div class="day-num-col"><span class="day-label">giorno</span><span class="day-number">46-47</span><span class="day-type-dot" style="background:var(--blue)"></span></div>
+          <div class="day-content-col">
+            <div class="day-title">HTTP Client & JWT Interceptor (2 giorni)</div>
+            <ul class="day-tasks">
+              <li>Crea un <code>AuthInterceptor</code> (HTTP interceptor): aggiunge automaticamente <code>Authorization: Bearer &lt;token&gt;</code> ad ogni richiesta verso la tua API</li>
+              <li>Implementa il <strong>refresh automatico del token</strong>: intercetta le risposte 401, chiama <code>/auth/refresh</code>, reinvia la richiesta originale con il nuovo token — identico al pattern Axios che avresti usato in React</li>
+              <li>Crea un <code>AuthService</code> con signals: <code>currentUser = signal&lt;User | null&gt;(null)</code>, metodi <code>login()</code>, <code>logout()</code>, <code>loadCurrentUser()</code></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="day-row">
+          <div class="day-num-col"><span class="day-label">giorno</span><span class="day-number">48-50</span><span class="day-type-dot" style="background:var(--blue)"></span></div>
+          <div class="day-content-col">
+            <div class="day-title">Pagine Auth — Login, Register, OAuth (3 giorni)</div>
+            <ul class="day-tasks">
+              <li>Installa Tailwind CSS con Angular: <code>npm i tailwindcss postcss autoprefixer</code></li>
+              <li>Form di login con <strong>Reactive Forms</strong> (<code>FormGroup</code>, <code>FormControl</code>, <code>Validators</code>) — la versione Angular delle form controlled, più potente per form complessi</li>
+              <li>Form di registrazione con validazione cross-field (password === confirmPassword) usando un <code>Validator</code> custom</li>
+              <li>Bottoni OAuth: link a <code>/api/auth/google</code> e <code>/api/auth/github</code> — il redirect al provider avviene lato backend</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="day-row">
+          <div class="day-num-col"><span class="day-label">giorno</span><span class="day-number">51-55</span><span class="day-type-dot" style="background:var(--blue)"></span></div>
+          <div class="day-content-col">
+            <div class="day-title">Homepage, Catalogo & Dettaglio Corso (5 giorni)</div>
+            <ul class="day-tasks">
+              <li>Homepage: hero section, corsi in evidenza (chiamata API), categorie, statistiche piattaforma</li>
+              <li>Catalogo: griglia corsi con filtri laterali (categoria, livello, range prezzo). Usa <code>ActivatedRoute.queryParams</code> per sincronizzare i filtri con l'URL — comportamento "shareable"</li>
+              <li>Ricerca in tempo reale con debounce usando RxJS <code>debounceTime(300)</code> + <code>distinctUntilChanged()</code> + <code>switchMap()</code></li>
+              <li>Pagina dettaglio corso: layout a due colonne, accordion curriculum, sidebar sticky con CTA acquisto</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="day-row">
+          <div class="day-num-col"><span class="day-label">giorno</span><span class="day-number">56-61</span><span class="day-type-dot" style="background:var(--blue)"></span></div>
+          <div class="day-content-col">
+            <div class="day-title">Player Lezione & Dashboard Studente (6 giorni)</div>
+            <ul class="day-tasks">
+              <li>Layout player: video (HTML5 nativo) a sinistra, navigazione lezioni a destra. Salva il timestamp ogni 10 secondi via API</li>
+              <li>Componente Quiz: domande a scelta multipla, feedback animato, progresso salvato alla risposta corretta</li>
+              <li>Dashboard studente: lista corsi con progress bar, stato completamento, link ai certificati scaricabili</li>
+              <li>Usa <strong>Angular Signals</strong> per il progress tracking locale — aggiorna il segnale ottimisticamente e sincronizza con il backend</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="day-row">
+          <div class="day-num-col"><span class="day-label">giorno</span><span class="day-number">62-68</span><span class="day-type-dot" style="background:var(--blue)"></span></div>
+          <div class="day-content-col">
+            <div class="day-title">Dashboard Instructor & Admin Panel (7 giorni)</div>
+            <ul class="day-tasks">
+              <li>Instructor: lista corsi propri, form creazione corso multi-step (Angular Stepper), editor lezione con upload video (presigned URL + progress bar)</li>
+              <li>Builder quiz drag-and-drop con <code>@angular/cdk/drag-drop</code></li>
+              <li>Admin Panel: tabella utenti con <code>@angular/material</code> DataTable (sorting, pagination, filtering lato server), gestione corsi in revisione</li>
+              <li>Dashboard analytics con <code>ng-charts</code> (Chart.js wrapper): iscrizioni per giorno (line chart), distribuzione per categoria (pie chart), revenue mensile (bar chart)</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="day-row">
+          <div class="day-num-col"><span class="day-label">giorno</span><span class="day-number">69-72</span><span class="day-type-dot" style="background:var(--blue)"></span></div>
+          <div class="day-content-col">
+            <div class="day-title">PWA — Service Worker, Manifest, Offline (4 giorni)</div>
+            <ul class="day-tasks">
+              <li><strong>Studia (1.5h):</strong> Service Worker lifecycle (install → activate → fetch), strategie di cache (Cache First per asset statici, Network First per API, Stale-While-Revalidate per immagini)</li>
+              <li>Aggiungi il pacchetto PWA ufficiale: <code>ng add @angular/pwa</code> — genera automaticamente il manifest, le icone e il Service Worker pre-configurato con Workbox</li>
+              <li>Configura <code>ngsw-config.json</code>: definisci quali risorse cachare (asset statici) e quali no (chiamate API)</li>
+              <li>Testa: metti offline il browser in DevTools e verifica che la shell dell'app si carichi ancora</li>
+              <li>Lighthouse audit: punta a score PWA 100 e Performance >85</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="day-row milestone-day">
+          <div class="day-num-col"><span class="day-label">giorno</span><span class="day-number">73</span><span class="day-type-dot" style="background:var(--gold)"></span></div>
+          <div class="day-content-col">
+            <div class="day-title">Integration Test Frontend ↔ Backend</div>
+            <ul class="day-tasks">
+              <li>Flusso completo: registrazione → login → browse → acquisto (Braintree sandbox) → accesso lezione → quiz → certificato</li>
+              <li>Testa tutti e 3 i ruoli con account dedicati</li>
+              <li>Testa su smartphone reale: installazione PWA funzionante? Layout corretto su piccolo schermo?</li>
+            </ul>
+            <div class="milestone-banner">🎯 MILESTONE: applicazione full-stack Angular + NestJS funzionante end-to-end, installabile come PWA.</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  </div>
+
+  <!-- ===== PHASE 04 ===== -->
+  <div class="ph4">
+  <div class="phase" id="ph4">
+    <div class="phase-header" onclick="toggle('ph4')">
+      <div class="phase-num">04</div>
+      <div class="phase-info">
+        <div class="phase-name">Redis — Caching, Rate Limiting, Load Balancer & Sessioni</div>
+        <div class="phase-meta"><span class="phase-days">Giorni 74–87 · 14 giorni</span><span class="badge build"><span class="badge-dot"></span>Studio + Implementazione</span></div>
+        <div class="phase-color-bar"></div>
+      </div>
+      <div class="phase-toggle">▾</div>
+    </div>
+    <div class="phase-body">
+      <div class="concept-box">
+        <div class="concept-title">// Redis, Caching e Load Balancer — il triangolo della scalabilità</div>
+        <div class="concept-text">
+          <strong>Redis</strong> è un database in-memory con latenza sub-millisecondo. Nella tua architettura lo usi per: caching delle risposte API frequenti, rate limiting delle richieste, storage dei refresh token (più veloce del DB), e come broker di messaggi per BullMQ (fase successiva).<br><br>
+          <strong>Load Balancer (teoria):</strong> quando hai più istanze del backend (es. 3 container ECS), chi smista le richieste? Il Load Balancer. Distribuisce il traffico in round-robin o per peso, esegue health check e rimuove le istanze non sane. <strong>Un problema critico con il caching:</strong> se hai 3 istanze e ognuna ha la sua cache in memoria, un utente potrebbe vedere dati diversi a seconda di quale istanza risponde. Redis risolve questo: è una cache <em>condivisa</em> tra tutte le istanze — tutti leggono e scrivono sulla stessa sorgente. Ecco perché Redis e Load Balancer sono strettamente correlati.
+        </div>
+      </div>
+      <div class="days-list">
+
+        <div class="day-row">
+          <div class="day-num-col"><span class="day-label">giorno</span><span class="day-number">74</span><span class="day-type-dot" style="background:var(--purple)"></span></div>
+          <div class="day-content-col">
+            <div class="day-title">Redis — Strutture Dati & CLI</div>
+            <ul class="day-tasks">
+              <li><strong>Studia (2h):</strong> le 5 strutture dati Redis: String, Hash, List, Set, Sorted Set — con esempi pratici d'uso per ognuna</li>
+              <li>Connettiti al container Redis con <code>redis-cli</code>: sperimenta <code>SET/GET</code>, <code>HSET/HGETALL</code>, <code>EXPIRE/TTL</code>, <code>INCR</code>, <code>ZADD/ZRANGE</code></li>
+              <li>Naming convention delle chiavi: <code>course:list:page:1</code>, <code>course:detail:{slug}</code>, <code>user:{id}:refresh_token</code>, <code>rate_limit:{ip}:{endpoint}</code></li>
+              <li>Capisci la differenza tra <code>DEL</code> (sincrono) e <code>UNLINK</code> (asincrono, preferito in prod)</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="day-row">
+          <div class="day-num-col"><span class="day-label">giorno</span><span class="day-number">75-77</span><span class="day-type-dot" style="background:var(--green)"></span></div>
+          <div class="day-content-col">
+            <div class="day-title">Caching in NestJS con Redis (3 giorni)</div>
+            <ul class="day-tasks">
+              <li>Installa <code>@nestjs/cache-manager cache-manager-ioredis ioredis</code></li>
+              <li>Configura <code>CacheModule.registerAsync()</code> con il Redis del container. Inietta <code>CACHE_MANAGER</code> nei service</li>
+              <li>Cache manuale nei service: prima della query al DB controlla Redis (<code>cacheManager.get(key)</code>), se non c'è fai la query e salva in Redis con TTL (<code>cacheManager.set(key, data, 900)</code>)</li>
+              <li><strong>Cache invalidation:</strong> quando un instructor modifica un corso, cancella le chiavi corrispondenti. Usa un pattern di chiavi per invalidarle in blocco: <code>DEL course:list:*</code> (con scan + unlink, non con DEL diretto)</li>
+              <li>Misura il miglioramento con endpoint timer: primo hit 120ms, cache hit 3ms</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="day-row">
+          <div class="day-num-col"><span class="day-label">giorno</span><span class="day-number">78-79</span><span class="day-type-dot" style="background:var(--green)"></span></div>
+          <div class="day-content-col">
+            <div class="day-title">Rate Limiting con Redis (2 giorni)</div>
+            <ul class="day-tasks">
+              <li>Installa <code>@nestjs/throttler</code> e configura con Redis store per il rate limiting distribuito (essenziale con più istanze/Load Balancer)</li>
+              <li>Regole differenziate: endpoint di login → 5 tentativi/minuto per IP, poi blocco 15min. API pubblica → 100 req/ora. API autenticata → 1000/ora</li>
+              <li>Aggiungi headers di risposta: <code>X-RateLimit-Limit</code>, <code>X-RateLimit-Remaining</code>, <code>Retry-After</code></li>
+              <li>Testa il lockout: scrivi uno script Node.js che fa 10 richieste rapide all'endpoint login e verifica il comportamento</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="day-row">
+          <div class="day-num-col"><span class="day-label">giorno</span><span class="day-number">80-83</span><span class="day-type-dot" style="background:var(--purple)"></span></div>
+          <div class="day-content-col">
+            <div class="day-title">Load Balancer — Teoria Approfondita (4 giorni)</div>
+            <ul class="day-tasks">
+              <li><strong>Giorno 80 — Concetti base:</strong> Layer 4 (TCP/IP) vs Layer 7 (HTTP). Round Robin, Least Connections, IP Hash. Health checks attivi e passivi. Sticky sessions (e perché sono un problema). Studia la differenza tra Load Balancer hardware (F5), software (Nginx, HAProxy) e cloud-managed (AWS ALB)</li>
+              <li><strong>Giorno 81 — Nginx come Reverse Proxy:</strong> installa Nginx localmente (non Docker per ora). Configura un <code>upstream</code> con 2 istanze NestJS su porte diverse (3000 e 3001). Avvia entrambe le istanze e verifica la distribuzione del traffico. Aggiungi i security headers HTTP (X-Frame-Options, X-Content-Type-Options, Strict-Transport-Security)</li>
+              <li><strong>Giorno 82 — Sessioni e stato condiviso:</strong> dimostra il problema delle sessioni in-memory con 2 istanze: login su istanza 1, richiesta autenticata su istanza 2 → fallisce. Poi passa i refresh token su Redis → funziona su entrambe le istanze. Questa è la proof-of-concept del perché Redis è necessario con il Load Balancer</li>
+              <li><strong>Giorno 83 — AWS ALB (teoria + documentazione):</strong> studia la documentazione AWS ALB: Target Groups, Listener Rules, Path-Based Routing, SSL Termination, WAF integration. Disegna il diagramma di come funzionerà nella tua architettura finale (la implementerai nella Fase 8)</li>
+            </ul>
+            <div class="tip-box"><strong>💡 Perché studiare Load Balancer ora invece che nella Fase DevOps:</strong> capire il Load Balancer mentre stai ancora costruendo l'app ti fa prendere decisioni architetturali corrette (es. statelessness delle API, shared cache su Redis). Se lo studi solo alla fine, potresti dover fare refactoring.</div>
+          </div>
+        </div>
+
+        <div class="day-row milestone-day">
+          <div class="day-num-col"><span class="day-label">giorno</span><span class="day-number">84</span><span class="day-type-dot" style="background:var(--gold)"></span></div>
+          <div class="day-content-col">
+            <div class="day-title">Performance Benchmark — con e senza Redis</div>
+            <ul class="day-tasks">
+              <li>Usa <code>autocannon</code> (npm) per un load test locale: 100 richieste concorrenti all'endpoint corsi per 30 secondi</li>
+              <li>Confronta: senza cache (ogni request → query PostgreSQL) vs con cache Redis</li>
+              <li>Documenta il risultato (req/sec, latenza P99) nel README — ottimo contenuto per il portfolio</li>
+            </ul>
+            <div class="milestone-banner">🎯 MILESTONE: caching distribuito e rate limiting operativi. App pronta per scenari multi-istanza.</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  </div>
+
+  <!-- ===== PHASE 05 ===== -->
+  <div class="ph5">
+  <div class="phase" id="ph5">
+    <div class="phase-header" onclick="toggle('ph5')">
+      <div class="phase-num">05</div>
+      <div class="phase-info">
+        <div class="phase-name">BullMQ — Job Queue, Workers & Task Asincroni</div>
+        <div class="phase-meta"><span class="phase-days">Giorni 85–98 · 14 giorni</span><span class="badge build"><span class="badge-dot"></span>Implementazione</span></div>
+        <div class="phase-color-bar"></div>
+      </div>
+      <div class="phase-toggle">▾</div>
+    </div>
+    <div class="phase-body">
+      <div class="concept-box">
+        <div class="concept-title">// BullMQ — il Celery del mondo Node.js</div>
+        <div class="concept-text">
+          <strong>BullMQ</strong> è la libreria di job queue più usata nell'ecosistema Node.js. Usa Redis come broker (le stesse istanza già configurata). Con <code>@nestjs/bullmq</code> si integra perfettamente nell'architettura NestJS: definisci una coda con <code>@Processor('email')</code> e i worker con <code>@OnWorkerEvent</code>. Supporta retry automatici con exponential backoff, job scheduling (ripetuto ogni X ore), priorità, e concorrenza configurabile.
+        </div>
+      </div>
+      <div class="days-list">
+
+        <div class="day-row">
+          <div class="day-num-col"><span class="day-label">giorno</span><span class="day-number">85-86</span><span class="day-type-dot" style="background:var(--purple)"></span></div>
+          <div class="day-content-col">
+            <div class="day-title">BullMQ — Setup & Primo Job (2 giorni)</div>
+            <ul class="day-tasks">
+              <li><strong>Studia (1.5h):</strong> architettura Producer-Broker-Consumer, differenza tra <em>job</em> e <em>worker</em>, concetto di coda FIFO, retry policy, dead letter queue</li>
+              <li>Installa <code>@nestjs/bullmq bullmq</code>. Configura <code>BullModule.forRoot()</code> con la connessione Redis</li>
+              <li>Crea il primo modulo con una coda: <code>BullModule.registerQueue({ name: 'email' })</code></li>
+              <li>Inietta <code>Queue</code> nel service e aggiungi il primo job: <code>this.emailQueue.add('welcome', { userId })</code></li>
+              <li>Crea il <code>Processor</code> con <code>@Processor('email')</code> e il metodo <code>@Process('welcome')</code> — esegui il job e verifica nella BullMQ Dashboard</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="day-row">
+          <div class="day-num-col"><span class="day-label">giorno</span><span class="day-number">87-89</span><span class="day-type-dot" style="background:var(--orange)"></span></div>
+          <div class="day-content-col">
+            <div class="day-title">Email System con Nodemailer (3 giorni)</div>
+            <ul class="day-tasks">
+              <li>Configura <code>@nestjs-modules/mailer</code> con <code>nodemailer</code> e il provider <strong>Mailgun</strong> (free tier: 5000 email/mese)</li>
+              <li>Crea template HTML per le email con Handlebars (integrato nel modulo mailer): <code>welcome.hbs</code>, <code>enrollment-confirm.hbs</code>, <code>certificate-ready.hbs</code></li>
+              <li>Job <code>send-welcome-email</code>: triggered alla registrazione, 3 retry con backoff esponenziale (30s, 90s, 270s)</li>
+              <li>Job <code>send-enrollment-confirmation</code>: triggered all'iscrizione o al pagamento riuscito</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="day-row">
+          <div class="day-num-col"><span class="day-label">giorno</span><span class="day-number">90-93</span><span class="day-type-dot" style="background:var(--orange)"></span></div>
+          <div class="day-content-col">
+            <div class="day-title">Generazione Certificati PDF (4 giorni)</div>
+            <ul class="day-tasks">
+              <li>Job <code>generate-certificate</code>: triggered dall'EventEmitter quando enrollment.progress = 100%</li>
+              <li>Usa <code>puppeteer</code> o <code>pdfkit</code> per generare il PDF — Puppeteer crea PDF da HTML/CSS (risultato professionale), pdfkit è più leggero ma richiede programmazione procedurale</li>
+              <li>Design certificato: nome studente, corso, data, firma digitale (UUID), QR code generato con <code>qrcode</code></li>
+              <li>Salva il PDF su filesystem locale (sostituirai con S3 nella Fase 7), aggiorna il record Certificate nel DB con il path</li>
+              <li>Endpoint pubblico di verifica: <code>GET /certificates/verify/:uuid</code></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="day-row">
+          <div class="day-num-col"><span class="day-label">giorno</span><span class="day-number">94-96</span><span class="day-type-dot" style="background:var(--orange)"></span></div>
+          <div class="day-content-col">
+            <div class="day-title">Job Schedulati con BullMQ Repeatable (3 giorni)</div>
+            <ul class="day-tasks">
+              <li>Job quotidiano (cron <code>0 9 * * *</code>): <code>send-daily-digest</code> — per ogni studente con corsi attivi, invia il riassunto della prossima lezione</li>
+              <li>Job settimanale (cron <code>0 8 * * 1</code>): <code>send-instructor-weekly-report</code> — iscritti della settimana, revenue, lezione più vista</li>
+              <li>Job notturno (cron <code>0 2 * * *</code>): <code>cleanup-expired-tokens</code> — rimuove i refresh token scaduti dal DB</li>
+              <li>Installa <strong>Bull Board</strong> (dashboard web per BullMQ): monitora le code, vedi i job falliti, reinvia manualmente</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="day-row milestone-day">
+          <div class="day-num-col"><span class="day-label">giorno</span><span class="day-number">97</span><span class="day-type-dot" style="background:var(--gold)"></span></div>
+          <div class="day-content-col">
+            <div class="day-title">Stress Test delle Code</div>
+            <ul class="day-tasks">
+              <li>Simula 1000 iscrizioni contemporanee — verifica che tutti i job vengano accodati e processati in ordine senza perdite</li>
+              <li>Simula un fallimento del worker (spegni il processo) — verifica che i job non persi vengano ripresi al riavvio</li>
+              <li>Monitora la dashboard Bull Board durante il test</li>
+            </ul>
+            <div class="milestone-banner">🎯 MILESTONE: sistema asincrono completo. Email, PDF, scheduled tasks — tutto fuori dal ciclo HTTP.</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  </div>
+
+  <!-- ===== PHASE 06 ===== -->
+  <div class="ph6">
+  <div class="phase" id="ph6">
+    <div class="phase-header" onclick="toggle('ph6')">
+      <div class="phase-num">06</div>
+      <div class="phase-info">
+        <div class="phase-name">Pagamenti — Braintree (Visa/Mastercard) + PayPal</div>
+        <div class="phase-meta"><span class="phase-days">Giorni 98–111 · 14 giorni</span><span class="badge build"><span class="badge-dot"></span>Implementazione</span></div>
+        <div class="phase-color-bar"></div>
+      </div>
+      <div class="phase-toggle">▾</div>
+    </div>
+    <div class="phase-body">
+      <div class="concept-box">
+        <div class="concept-title">// Perché Braintree — e come funziona l'architettura di pagamento</div>
+        <div class="concept-text">
+          <strong>Braintree</strong> (di PayPal, Inc.) è un gateway di pagamento che gestisce in un unico SDK: Visa, Mastercard, Amex, Discover <em>e</em> PayPal nativo. Questo è esattamente ciò che hai richiesto — Braintree è il wrapper che ti permette di accettare tutte queste metodologie senza costruire integrazioni separate.<br><br>
+          <strong>Il flusso di sicurezza:</strong> (1) Il frontend chiede al backend un <em>client token</em>. (2) Il frontend usa il token per inizializzare il Braintree Drop-in UI — un componente sicuro di Braintree che raccoglie i dati della carta (i dati carta non toccano mai il tuo server). (3) Il Drop-in restituisce un <em>payment method nonce</em> — un token usa e getta. (4) Il frontend invia il nonce al tuo backend. (5) Il backend usa il nonce per creare una transazione su Braintree. Questo schema garantisce la compliance PCI-DSS anche per te.
+        </div>
+      </div>
+      <div class="days-list">
+
+        <div class="day-row">
+          <div class="day-num-col"><span class="day-label">giorno</span><span class="day-number">98-99</span><span class="day-type-dot" style="background:var(--purple)"></span></div>
+          <div class="day-content-col">
+            <div class="day-title">Braintree — Setup & Teoria (2 giorni)</div>
+            <ul class="day-tasks">
+              <li>Crea account Braintree Sandbox (gratuito). Ottieni le 3 credenziali: <code>merchantId</code>, <code>publicKey</code>, <code>privateKey</code></li>
+              <li><strong>Studia (2h):</strong> il flusso Client Token → Drop-in UI → Nonce → Transaction. Differenza tra <em>authorization</em> (riserva i fondi) e <em>settlement</em> (addebito effettivo). Concetto di <em>Vault</em> (salva il metodo di pagamento per pagamenti futuri)</li>
+              <li>Installa <code>braintree</code> Node.js SDK. Configura il gateway nel <code>PaymentsModule</code></li>
+              <li>Endpoint <code>GET /payments/client-token</code>: genera e restituisce il client token per il frontend</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="day-row">
+          <div class="day-num-col"><span class="day-label">giorno</span><span class="day-number">100-103</span><span class="day-type-dot" style="background:var(--cyan)"></span></div>
+          <div class="day-content-col">
+            <div class="day-title">Acquisto Singolo Corso — Visa/Mastercard (4 giorni)</div>
+            <ul class="day-tasks">
+              <li><strong>Frontend Angular:</strong> installa <code>braintree-web-drop-in</code>, inizializza il Drop-in nel componente di checkout con il client token, ottieni il nonce al click su "Paga"</li>
+              <li><strong>Backend NestJS — Endpoint <code>POST /payments/checkout</code>:</strong> riceve il nonce e l'ID del corso, verifica che l'utente non sia già iscritto, crea la transazione Braintree con <code>gateway.transaction.sale()</code></li>
+              <li>Se la transazione ha successo: crea il record Payment nel DB, triggera il job BullMQ per l'email di conferma, crea l'Enrollment</li>
+              <li>Gestisci i casi di errore Braintree: carta rifiutata (<code>processor_declined</code>), CVV errato, fondi insufficienti — mostra messaggi specifici al frontend</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="day-row">
+          <div class="day-num-col"><span class="day-label">giorno</span><span class="day-number">104-107</span><span class="day-type-dot" style="background:var(--cyan)"></span></div>
+          <div class="day-content-col">
+            <div class="day-title">PayPal Nativo & Abbonamento Mensile (4 giorni)</div>
+            <ul class="day-tasks">
+              <li>Il Drop-in UI di Braintree mostra automaticamente il pulsante PayPal — configura l'opzione <code>paypal: { flow: 'checkout' }</code> nel Drop-in initialization</li>
+              <li>Il flusso è identico: l'utente clicca PayPal → Braintree apre il popup PayPal → ottieni il nonce → stesso endpoint backend</li>
+              <li>Crea su Braintree un <strong>Plan</strong> per l'abbonamento mensile. Endpoint <code>POST /payments/subscribe</code>: crea un Customer Braintree (con Vault del metodo di pagamento) e avvia la Subscription</li>
+              <li>Endpoint <code>POST /payments/webhook</code>: ricevi le notifiche Braintree (rinnovo riuscito, pagamento fallito, cancellazione). Verifica sempre la firma del webhook!</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="day-row milestone-day">
+          <div class="day-num-col"><span class="day-label">giorno</span><span class="day-number">108</span><span class="day-type-dot" style="background:var(--gold)"></span></div>
+          <div class="day-content-col">
+            <div class="day-title">Test Pagamenti — Tutte le Carte di Test</div>
+            <ul class="day-tasks">
+              <li>Testa con tutte le carte di test Braintree: <code>4111111111111111</code> (Visa OK), <code>4000111111111115</code> (Visa rifiutata), <code>4000001000000009</code> (AVS rifiutato)</li>
+              <li>Testa il flusso PayPal in sandbox con account PayPal di test</li>
+              <li>Simula il webhook di rinnovo abbonamento con il tool di test Braintree</li>
+              <li>Idempotenza: un webhook doppio non deve creare due Enrollment</li>
+            </ul>
+            <div class="milestone-banner">🎯 MILESTONE: sistema di pagamento completo — Visa, Mastercard e PayPal via Braintree, con abbonamenti e webhook.</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  </div>
+
+  <!-- ===== PHASE 07 ===== -->
+  <div class="ph7">
+  <div class="phase" id="ph7">
+    <div class="phase-header" onclick="toggle('ph7')">
+      <div class="phase-num">07</div>
+      <div class="phase-info">
+        <div class="phase-name">AWS S3 + CloudFront — Storage & CDN</div>
+        <div class="phase-meta"><span class="phase-days">Giorni 109–120 · 12 giorni</span><span class="badge devops"><span class="badge-dot"></span>Cloud</span></div>
+        <div class="phase-color-bar"></div>
+      </div>
+      <div class="phase-toggle">▾</div>
+    </div>
+    <div class="phase-body">
+      <div class="concept-box">
+        <div class="concept-title">// S3 e CloudFront — storage e distribuzione globale</div>
+        <div class="concept-text">
+          <strong>AWS S3</strong> è uno storage a oggetti scalabile all'infinito. I file (video, immagini, PDF) vivono in <em>bucket</em> e sono accessibili via URL. Non è un filesystem — non hai cartelle reali, ma il nome dell'oggetto può includere <code>/</code> per simulare una struttura.<br><br>
+          <strong>CloudFront</strong> è la CDN AWS: distribuisce i tuoi file S3 da edge server in tutto il mondo. Un utente in Giappone scarica il video dal punto di presenza AWS più vicino, non dal bucket in us-east-1. Riduce la latenza e il costo (il trasferimento da CloudFront è più economico di S3 diretto).<br><br>
+          <strong>Presigned URLs:</strong> tecnica cruciale — invece di far passare i file caricati per il tuo server (lento, costoso), il backend genera un URL S3 firmato e temporaneo, il client fa upload direttamente a S3. I video non transitano per NestJS.
+        </div>
+      </div>
+      <div class="days-list">
+
+        <div class="day-row">
+          <div class="day-num-col"><span class="day-label">giorno</span><span class="day-number">109-110</span><span class="day-type-dot" style="background:var(--purple)"></span></div>
+          <div class="day-content-col">
+            <div class="day-title">AWS IAM & S3 Setup (2 giorni)</div>
+            <ul class="day-tasks">
+              <li>Crea account AWS (free tier). <strong>Mai usare il root account</strong> — crea subito un utente IAM con il solo accesso S3 necessario (principio del minimo privilegio)</li>
+              <li><strong>Studia IAM (1.5h):</strong> Users, Groups, Roles, Policies. Come scrivere una policy JSON che permette solo <code>s3:GetObject</code>, <code>s3:PutObject</code>, <code>s3:DeleteObject</code> su un bucket specifico</li>
+              <li>Crea 2 bucket: <code>YouStudent-media</code> (video e immagini, accesso via CloudFront) e <code>YouStudent-private</code> (certificati PDF, accesso solo tramite signed URL)</li>
+              <li>Installa <code>@aws-sdk/client-s3 @aws-sdk/s3-request-presigner</code> nel backend NestJS</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="day-row">
+          <div class="day-num-col"><span class="day-label">giorno</span><span class="day-number">111-113</span><span class="day-type-dot" style="background:var(--gold)"></span></div>
+          <div class="day-content-col">
+            <div class="day-title">Presigned URL Upload & NestJS Integration (3 giorni)</div>
+            <ul class="day-tasks">
+              <li>Endpoint <code>POST /uploads/presigned-url</code>: riceve <code>{ fileName, fileType, fileSize }</code>, valida l'estensione (solo mp4/webm/pdf/jpg), genera un presigned PUT URL valido 10 minuti e restituisce URL + chiave S3</li>
+              <li>Frontend Angular: all'upload del video, chiama prima l'endpoint presigned, poi fa <code>PUT</code> direttamente su S3 con progress bar (<code>HttpClient</code> con <code>reportProgress: true</code>)</li>
+              <li>Dopo l'upload: il frontend invia la chiave S3 al backend, che la salva nel record Lesson/Certificate</li>
+              <li>Migra la generazione certificati PDF da filesystem locale a S3</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="day-row">
+          <div class="day-num-col"><span class="day-label">giorno</span><span class="day-number">114-116</span><span class="day-type-dot" style="background:var(--gold)"></span></div>
+          <div class="day-content-col">
+            <div class="day-title">CloudFront — CDN Setup & Contenuto Protetto (3 giorni)</div>
+            <ul class="day-tasks">
+              <li>Crea una distribuzione CloudFront con il bucket media come origin. Configura <strong>OAC (Origin Access Control)</strong>: solo CloudFront può leggere S3, il bucket resta privato</li>
+              <li>Aggiorna tutti gli URL nel backend: da <code>s3.amazonaws.com/...</code> a <code>cdn.tuodominio.com/...</code></li>
+              <li>Cache behavior: video e immagini (TTL 1 anno con versioning via query string), thumbnail (TTL 1 giorno)</li>
+              <li><strong>CloudFront Signed URLs</strong> per i video delle lezioni protette: il backend genera un URL firmato valido 2 ore — solo gli studenti iscritti possono guardare</li>
+              <li>Testa che un URL diretto S3 restituisca 403, e che il signed URL funzioni ma scada correttamente</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="day-row milestone-day">
+          <div class="day-num-col"><span class="day-label">giorno</span><span class="day-number">117</span><span class="day-type-dot" style="background:var(--gold)"></span></div>
+          <div class="day-content-col">
+            <div class="day-title">Review Storage & CDN</div>
+            <ul class="day-tasks">
+              <li>Verifica che tutti i file transitino correttamente: upload video → S3 → CloudFront URL nel frontend</li>
+              <li>Testa le performance: carica un video da un browser con DevTools aperto — il video deve servire da CloudFront (verifica gli header <code>X-Cache: Hit from CloudFront</code>)</li>
+            </ul>
+            <div class="milestone-banner">🎯 MILESTONE: storage cloud operativo con CDN globale, presigned upload e contenuto video protetto.</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  </div>
+
+  <!-- ===== PHASE 08 ===== -->
+  <div class="ph8">
+  <div class="phase" id="ph8">
+    <div class="phase-header" onclick="toggle('ph8')">
+      <div class="phase-num">08</div>
+      <div class="phase-info">
+        <div class="phase-name">Docker Completo + CI/CD GitLab + AWS ECS + Load Balancer</div>
+        <div class="phase-meta"><span class="phase-days">Giorni 118–138 · 21 giorni</span><span class="badge devops"><span class="badge-dot"></span>DevOps</span></div>
+        <div class="phase-color-bar"></div>
+      </div>
+      <div class="phase-toggle">▾</div>
+    </div>
+    <div class="phase-body">
+      <div class="concept-box">
+        <div class="concept-title">// Ora containerizzi l'app — perché la sequenza è giusta</div>
+        <div class="concept-text">
+          Hai rimandato Docker per l'applicazione fino a qui, e la scelta è stata corretta: ora conosci profondamente il codice, sai quali variabili d'ambiente servono, quali porte esporre, quali servizi dipendono da quali. Containerizzare un'app che non capisci è un esercizio meccanico; containerizzare un'app che hai costruito tu è un atto di ingegneria consapevole.<br><br>
+          In questa fase costruirai la pipeline completa: <strong>push su GitLab → test automatici → build immagine Docker → push su AWS ECR → deploy su ECS con rolling update</strong>. Zero intervento manuale dal secondo deployment in poi.
+        </div>
+      </div>
+      <div class="days-list">
+
+        <div class="day-row">
+          <div class="day-num-col"><span class="day-label">giorno</span><span class="day-number">118-120</span><span class="day-type-dot" style="background:var(--purple)"></span></div>
+          <div class="day-content-col">
+            <div class="day-title">Docker — Teoria Completa + Multi-stage Builds (3 giorni)</div>
+            <ul class="day-tasks">
+              <li><strong>Giorno 118 — Fondamentali:</strong> differenza tra immagine e container, layer system, Dockerfile instructions (<code>FROM</code>, <code>COPY</code>, <code>RUN</code>, <code>ENV</code>, <code>EXPOSE</code>, <code>CMD</code> vs <code>ENTRYPOINT</code>), volumi, port mapping, networking tra container</li>
+              <li><strong>Giorno 119 — Multi-stage build per NestJS:</strong> stage 1 "builder" (<code>node:20-alpine</code>: installa deps, compila TypeScript). Stage 2 "production" (<code>node:20-alpine</code>: copia solo <code>dist/</code> e <code>node_modules</code> production). L'immagine finale pesa ~150MB invece di 800MB</li>
+              <li><strong>Giorno 120 — Build Angular + Nginx:</strong> stage 1 "builder" (<code>node:20-alpine</code>: <code>ng build --configuration production</code>). Stage 2 (<code>nginx:alpine</code>: copia il <code>dist/</code> nella root Nginx). Configura <code>nginx.conf</code> per SPA (tutte le route → <code>index.html</code>) e gzip dei file JS/CSS</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="day-row">
+          <div class="day-num-col"><span class="day-label">giorno</span><span class="day-number">121-122</span><span class="day-type-dot" style="background:var(--blue)"></span></div>
+          <div class="day-content-col">
+            <div class="day-title">Docker Compose di Produzione (2 giorni)</div>
+            <ul class="day-tasks">
+              <li>Aggiorna <code>docker-compose.yml</code>: aggiungi i servizi <code>backend</code> e <code>frontend</code> con le immagini di produzione</li>
+              <li>Usa variabili d'ambiente dal file <code>.env</code> (mai hardcodare credenziali). Aggiungi <code>depends_on</code> con health check: il backend aspetta che PostgreSQL sia pronto</li>
+              <li>Testa che l'intera stack si avvii con <code>docker-compose up</code> e che l'app funzioni identicamente all'ambiente locale</li>
+              <li>Aggiungi un container Nginx come reverse proxy: porta 80/443 → backend su :3000, <code>/</code> → frontend su :80</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="day-row">
+          <div class="day-num-col"><span class="day-label">giorno</span><span class="day-number">123-126</span><span class="day-type-dot" style="background:var(--blue)"></span></div>
+          <div class="day-content-col">
+            <div class="day-title">GitLab CI/CD — Pipeline Completa (4 giorni)</div>
+            <ul class="day-tasks">
+              <li>Crea il progetto su GitLab.com (free: 2000 min CI/mese — più che sufficienti). Pusha il codice</li>
+              <li>Scrivi <code>.gitlab-ci.yml</code> con 4 stage in sequenza:<br>
+              <code>test</code>: esegue i test NestJS (<code>npm run test:cov</code>) e Angular (<code>ng test --watch=false</code>) — fallisce se coverage &lt;60%<br>
+              <code>build</code>: <code>docker build</code> delle immagini backend e frontend<br>
+              <code>push</code>: autentica su AWS ECR e fa push delle immagini con tag = SHA del commit<br>
+              <code>deploy</code>: aggiorna il Task Definition ECS con la nuova immagine e aggiorna il Service (rolling update) — solo su branch <code>main</code></li>
+              <li>Configura le variabili CI/CD in GitLab (Settings → CI/CD → Variables): <code>AWS_ACCESS_KEY_ID</code>, <code>AWS_SECRET_ACCESS_KEY</code>, <code>ECR_REGISTRY</code></li>
+            </ul>
+            <div class="tip-box"><strong>💡 GitLab vs Jenkins per questo progetto:</strong> GitLab CI è la scelta corretta — runner già pronti su gitlab.com, YAML semplice, 2000 min/mese gratuiti. Jenkins richiede un server dedicato (costo + manutenzione) e una configurazione molto più complessa. L'overhead non è giustificato per un progetto personale.</div>
+          </div>
+        </div>
+
+        <div class="day-row">
+          <div class="day-num-col"><span class="day-label">giorno</span><span class="day-number">127-131</span><span class="day-type-dot" style="background:var(--blue)"></span></div>
+          <div class="day-content-col">
+            <div class="day-title">AWS ECS Fargate — Deploy in Cloud (5 giorni)</div>
+            <ul class="day-tasks">
+              <li><strong>Studia (1.5h):</strong> ECS Cluster, Task Definition (definisce i container e le risorse CPU/RAM), Service (mantiene N task sempre in esecuzione), Fargate (serverless — AWS gestisce i server sottostanti)</li>
+              <li>Crea l'infrastruttura AWS: ECS Cluster, Task Definition per backend (512 CPU, 1024MB RAM) + frontend Nginx</li>
+              <li>Configura <strong>RDS PostgreSQL</strong> managed (con Multi-AZ per alta disponibilità in demo) e <strong>ElastiCache Redis</strong> managed</li>
+              <li>Usa <strong>AWS Secrets Manager</strong> per tutte le credenziali: le variabili d'ambiente sensibili vengono iniettate nei container al boot, mai salvate nel Task Definition</li>
+              <li>Primo deploy manuale per verificare — poi la pipeline CI/CD lo farà automaticamente</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="day-row">
+          <div class="day-num-col"><span class="day-label">giorno</span><span class="day-number">132-135</span><span class="day-type-dot" style="background:var(--blue)"></span></div>
+          <div class="day-content-col">
+            <div class="day-title">Application Load Balancer & HTTPS (4 giorni)</div>
+            <ul class="day-tasks">
+              <li>Crea un <strong>ALB</strong> con listener su porta 80 (redirect → 443) e 443 (HTTPS)</li>
+              <li>Ottieni un certificato SSL gratuito da <strong>AWS Certificate Manager (ACM)</strong> per il tuo dominio — configuralo sull'ALB (SSL Termination: HTTPS si ferma qui, internamente il traffico è HTTP)</li>
+              <li>Crea 2 <strong>Target Groups</strong>: uno per il backend NestJS (health check su <code>GET /health</code>), uno per il frontend Nginx</li>
+              <li>Configura le <strong>Listener Rules</strong> path-based: <code>/api/*</code> → Target Group backend, <code>/*</code> → Target Group frontend</li>
+              <li>Configura <strong>ECS Auto Scaling</strong>: scala da 1 a 3 task quando CPU >70% per più di 3 minuti</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="day-row milestone-day">
+          <div class="day-num-col"><span class="day-label">giorno</span><span class="day-number">136</span><span class="day-type-dot" style="background:var(--gold)"></span></div>
+          <div class="day-content-col">
+            <div class="day-title">CloudWatch Monitoring & Alarms</div>
+            <ul class="day-tasks">
+              <li>Dashboard CloudWatch: CPU/Memory ECS, latenza ALB, error rate 5xx, Redis hit rate, RDS connections</li>
+              <li>Alarms: notifica email se error rate >5% per 5 minuti consecutivi</li>
+              <li>Testa il CI/CD completo: fai un push su <code>main</code> e osserva la pipeline su GitLab — deploy automatico in ~5 minuti</li>
+            </ul>
+            <div class="milestone-banner">🎯 MILESTONE: app in produzione su AWS con HTTPS, CDN, auto-scaling, monitoring e pipeline CI/CD completamente automatica.</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  </div>
+
+  <!-- ===== PHASE 09 ===== -->
+  <div class="ph9">
+  <div class="phase" id="ph9">
+    <div class="phase-header" onclick="toggle('ph9')">
+      <div class="phase-num">09</div>
+      <div class="phase-info">
+        <div class="phase-name">Testing, Security, Polish & Portfolio</div>
+        <div class="phase-meta"><span class="phase-days">Giorni 137–152 · 16 giorni</span><span class="badge milestone"><span class="badge-dot"></span>Finalizzazione</span></div>
+        <div class="phase-color-bar"></div>
+      </div>
+      <div class="phase-toggle">▾</div>
+    </div>
+    <div class="phase-body">
+      <div class="days-list">
+
+        <div class="day-row">
+          <div class="day-num-col"><span class="day-label">giorno</span><span class="day-number">137-141</span><span class="day-type-dot" style="background:var(--purple)"></span></div>
+          <div class="day-content-col">
+            <div class="day-title">Test Suite Completa (5 giorni)</div>
+            <ul class="day-tasks">
+              <li><strong>Backend NestJS:</strong> unit test con Jest per service e guard, integration test degli endpoint con <code>@nestjs/testing</code> e <code>supertest</code>, test dei processor BullMQ con queue in memoria</li>
+              <li><strong>Frontend Angular:</strong> component test con <code>TestBed</code> e Angular Testing Utilities, test degli interceptor HTTP, test dei guard di routing</li>
+              <li>Target: >75% coverage backend, >60% coverage frontend</li>
+              <li>La pipeline GitLab blocca automaticamente il merge se i test falliscono</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="day-row">
+          <div class="day-num-col"><span class="day-label">giorno</span><span class="day-number">142-145</span><span class="day-type-dot" style="background:var(--purple)"></span></div>
+          <div class="day-content-col">
+            <div class="day-title">Security Hardening & Performance (4 giorni)</div>
+            <ul class="day-tasks">
+              <li>OWASP Top 10: SQL injection (TypeORM parametrizzato protegge), XSS (Angular sanitizza automaticamente l'interpolazione), CSRF (SPA con JWT non ha CSRF classico, ma attenzione ai cookie)</li>
+              <li>Installa <code>helmet</code> in NestJS: imposta automaticamente una dozzina di security headers HTTP</li>
+              <li>Audit dipendenze: <code>npm audit --audit-level=high</code> su backend e frontend, aggiorna le vulnerabilità critiche</li>
+              <li>Performance: analizza le query lente con <code>TypeORM logging: true</code>, aggiungi indici mancanti, verifica il bundle Angular con <code>ng build --stats-json</code> + webpack bundle analyzer</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="day-row">
+          <div class="day-num-col"><span class="day-label">giorno</span><span class="day-number">146-149</span><span class="day-type-dot" style="background:var(--gold)"></span></div>
+          <div class="day-content-col">
+            <div class="day-title">Documentazione & README Professionale (4 giorni)</div>
+            <ul class="day-tasks">
+              <li>README con: problema risolto, screenshot/GIF del prodotto, architettura diagram (Excalidraw o draw.io), tech stack con motivazioni delle scelte, setup locale in 5 comandi</li>
+              <li>Sezione "Architecture Decisions": perché NestJS (e non Express puro), perché Braintree (e non Stripe), perché Docker tardivo, perché Redis è necessario con il Load Balancer</li>
+              <li>Crea 3 account demo con dati pre-popolati: student@demo.com, instructor@demo.com, admin@demo.com (credenziali nel README)</li>
+              <li>API documentation pubblica su <code>/api/docs</code> con Swagger completo</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="day-row milestone-day">
+          <div class="day-num-col"><span class="day-label">giorno</span><span class="day-number">150-152</span><span class="day-type-dot" style="background:var(--gold)"></span></div>
+          <div class="day-content-col">
+            <div class="day-title">Demo Video & Portfolio Presentation</div>
+            <ul class="day-tasks">
+              <li>Registra un demo video di 4-5 minuti: flusso completo da tutti e 3 i ruoli, mostra il monitoring AWS in azione (auto-scaling), mostra la pipeline CI/CD su GitLab in esecuzione</li>
+              <li>Prepara la presentazione tecnica per i colloqui: sfide incontrate (es. cache invalidation, refresh token con più istanze, idempotenza webhook Braintree), come le hai risolte, cosa rifaresti diversamente</li>
+              <li>Pubblica su LinkedIn e GitHub con link al demo live e al repo</li>
+            </ul>
+            <div class="milestone-banner">🏆 PROGETTO COMPLETATO — YouStudent Hub: Angular · NestJS · PostgreSQL · MongoDB · Redis · BullMQ · Braintree/PayPal · AWS ECS · ALB · CloudFront · Docker · GitLab CI</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  </div>
+
+  <div class="footer">
+    <div style="margin-bottom:8px">2026 @Stega Michelangelo // YouStudent Hub v2 — Piano Operativo · ~138 giorni · ~552 ore · 4h/giorno</div>
+  </div>
+
+</div>
+
+<script>
+  function toggle(id) {
+    document.getElementById(id).classList.toggle('open');
+  }
+  document.getElementById('ph0').classList.add('open');
+</script>
+</body>
+</html>
