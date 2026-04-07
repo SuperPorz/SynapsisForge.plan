@@ -27,11 +27,54 @@
       <div class="progress-bar-fill" id="totalProgressBar"></div>
     </div>
     <div class="phase-progress-list" id="phaseProgressList"></div>
-    <div style="text-align: center; margin-top: 16px;">
-      <button id="logoutBtn" style="padding: 8px 16px; background: var(--rose); border: none; border-radius: 3px; color: white; cursor: pointer; font-size: 12px; font-weight: 600;">🔒 Logout</button>
-      <button id="syncBtn" style="padding: 8px 16px; background: var(--purple); border: none; border-radius: 3px; color: white; cursor: pointer; font-size: 12px; font-weight: 600; margin-left: 8px;" onclick="syncWithGithub()">🔄 Sync GitHub</button>
+    <div class="progress-actions">
+      <button id="importBtn" class="action-btn action-btn-import">&#128229; Import JSON</button>
+      <button id="exportBtn" class="action-btn action-btn-export">&#128228; Export JSON</button>
+      <button id="setDateBtn" class="action-btn action-btn-date" onclick="promptStartDate()">&#128197; Data Inizio</button>
     </div>
   </div>
+
+
+  <!-- PLANNED VS ACTUAL -->
+  <div class="pva-box" id="plannedVsActualBox">
+    <div class="pva-header">
+      <div class="pva-title">&#128200; Planned vs Actual</div>
+      <div class="pva-status" id="pvaStatus">&#8212;</div>
+    </div>
+    <div class="pva-grid">
+      <div class="pva-item">
+        <div class="pva-item-label">Pianificato ad oggi</div>
+        <div class="pva-item-bar-wrap"><div class="pva-item-bar planned-bar" id="plannedBar"></div></div>
+        <div class="pva-item-value" id="plannedPct">0%</div>
+      </div>
+      <div class="pva-item">
+        <div class="pva-item-label">Completato reale</div>
+        <div class="pva-item-bar-wrap"><div class="pva-item-bar actual-bar" id="actualBar"></div></div>
+        <div class="pva-item-value" id="actualPct">0%</div>
+      </div>
+    </div>
+    <div class="pva-chart-wrap">
+      <svg id="pvaSvg" width="100%" height="80" viewBox="0 0 700 80" preserveAspectRatio="xMidYMid meet"></svg>
+    </div>
+    <div class="pva-note" id="pvaNote">Imposta la data di inizio con il pulsante "Data Inizio" per attivare il confronto.</div>
+  </div>
+
+  <!-- GANTT CHART -->
+  <div class="gantt-box">
+    <div class="gantt-header-row">
+      <div class="gantt-title">&#128197; Gantt &mdash; Avanzamento per Fase</div>
+      <div class="gantt-legend">
+        <span class="gantt-leg-item"><span class="gantt-leg-dot" style="background:rgba(255,255,255,0.12)"></span>Pianificato</span>
+        <span class="gantt-leg-item"><span class="gantt-leg-dot" style="background:rgba(61,214,200,0.7)"></span>Completato</span>
+        <span class="gantt-leg-item" id="todayLegend" style="display:none"><span class="gantt-leg-dot" style="background:#F4C553"></span>Oggi</span>
+      </div>
+    </div>
+    <div class="gantt-scroll" id="ganttScroll">
+      <div id="ganttInner"></div>
+    </div>
+  </div>
+
+
 
   <div class="stack-row">
     <span class="stack-pill sp-red">Angular 18</span>
@@ -1090,7 +1133,7 @@
             <ul class="day-tasks">
               <li>README con: problema risolto, screenshot/GIF del prodotto, architettura diagram (Excalidraw o draw.io), tech stack con motivazioni delle scelte, setup locale in 5 comandi</li>
               <li>Sezione "Architecture Decisions": perché NestJS (e non Express puro), perché Braintree (e non Stripe), perché Docker tardivo, perché Redis è necessario con il Load Balancer</li>
-              <li>Crea 3 account demo con dati pre-popolati: student@demo.com, instructor@demo.com, admin@demo.com (credenziali nel README)</li>
+              <li>Crea 3 account demo con dati pre-popolati: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="8efdfafbeaebe0faceeaebe3e1a0ede1e3">[email&#160;protected]</a>, <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="157c7b6661676076617a67557170787a3b767a78">[email&#160;protected]</a>, <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="2d4c494044436d49484042034e4240">[email&#160;protected]</a> (credenziali nel README)</li>
               <li>API documentation pubblica su <code>/api/docs</code> con Swagger completo</li>
             </ul>
           </div>
@@ -1105,7 +1148,7 @@
               <li>Prepara la presentazione tecnica per i colloqui: sfide incontrate (es. cache invalidation, refresh token con più istanze, idempotenza webhook Braintree), come le hai risolte, cosa rifaresti diversamente</li>
               <li>Pubblica su LinkedIn e GitHub con link al demo live e al repo</li>
             </ul>
-            <div class="milestone-banner">🏆 PROGETTO COMPLETATO — YouStudent Hub: Angular · NestJS · PostgreSQL · MongoDB · Redis · BullMQ · Braintree/PayPal · AWS ECS · ALB · CloudFront · Docker · GitLab CI</div>
+            <div class="milestone-banner">🏆 PROGETTO COMPLETATO — YouStudent Hub: Angular · NestJS · PostgreSQL · MongoDB · Redis · BullMQ · Braintree/PayPal · AWS ECS · ALB · CloudFront �
           </div>
         </div>
 
@@ -1115,11 +1158,10 @@
   </div>
 
   <div class="footer">
-    <div style="margin-bottom:8px">2026 @Stega Michelangelo // YouStudent Hub v2 — Piano Operativo · ~138 giorni · ~552 ore · 4h/giorno</div>
+    // YouStudent Hub — Piano Operativo v2 &middot; ~181 giorni &middot; ~724 ore &middot; 4h/giorno
   </div>
 
 </div>
-
 <script src="script.js"></script>
 </body>
 </html>
