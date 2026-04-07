@@ -1,0 +1,111 @@
+Nome Progetto: YouStudent Hub
+Stack: Angular · NestJS · PostgreSQL · MongoDB · Redis · Braintree/PayPal · AWS · Docker (tardivo) · CI/CD GitLab
+
+--------------------------------------------------------------------------------------------------------
+
+FASE 00: Fondamenta — Setup Locale, TypeScript, Architettura (Giorni 1–6)
+
+- Giorno 1: Architettura & Strumenti. Disegnare architettura, installare Node.js, VS Code, Git, Postman, MongoDB Compass, pgAdmin. Struttura monorepo. Inizializzare repo Git.
+- Giorno 2: TypeScript — Fondamentali (parte 1). Studiare tipizzazione statica, interface vs type, generics. Esercizi pratici.
+- Giorno 3: TypeScript — Avanzato (parte 2). Studiare decoratori, utility types, type guards. Scrivere un decoratore custom @Log.
+- Giorno 4: Database Locali — Docker Compose solo per infrastruttura. Creare docker-compose.yml con postgres, mongo, redis.
+- Giorno 5: PostgreSQL vs MySQL & NoSQL vs SQL — Studio comparativo.
+- Giorno 6: Schema DB & Architettura Definitiva. Disegnare diagramma ER, definire cosa va in PostgreSQL e cosa in MongoDB. [MILESTONE]
+
+--------------------------------------------------------------------------------------------------------
+
+FASE 01: NestJS — Core Concepts & Backend API (Giorni 7–34)
+
+- Giorno 7: NestJS — Installazione & Primo Progetto. Creare progetto con CLI, aggiungere endpoint /health.
+- Giorno 8: Module System & Dependency Injection. Creare UsersModule, UsersController, UsersService.
+- Giorno 9: DTOs & ValidationPipe. Installare class-validator, creare DTO, abilitare ValidationPipe.
+- Giorno 10-11: TypeORM + PostgreSQL — Entities & Migrations. Configurare TypeORM, creare entity User, Course, Category, Lesson.
+- Giorno 12-13: Repository Pattern & CRUD Courses. Implementare CRUD per corsi, aggiungere Swagger.
+- Giorno 14-15: Mongoose + MongoDB — Lesson Content. Creare LessonContent schema, service per unire dati PostgreSQL e MongoDB.
+- Giorno 16-17: Interceptors — Response Transform & Logging. Creare TransformInterceptor, LoggingInterceptor, TimeoutInterceptor.
+- Giorno 18-19: Exception Filters & Error Handling. Creare HttpExceptionFilter globale, gestire errori TypeORM.
+- Giorno 20-22: Enrollment, Review, Certificate — API Complete. Implementare logiche di iscrizione, progresso ed eventi interni.
+- Giorno 23-25: Custom Pipes & Advanced Validation. Creare ParseUuidPipe, FileSizePipe.
+- Giorno 26: API Review & Documentazione Swagger. Completare documentazione e testare endpoint. [MILESTONE]
+
+--------------------------------------------------------------------------------------------------------
+
+FASE 02: Auth — JWT, OAuth2, Guards & RBAC in NestJS (Giorni 27–40)
+
+- Giorno 27: JWT — Teoria + Passport.js in NestJS. Studiare JWT, installare pacchetti, creare AuthModule.
+- Giorno 28-29: Implementazione JWT + Refresh Token. Creare JwtStrategy, endpoint login, refresh, logout.
+- Giorno 30: OAuth2 — Flusso Authorization Code (Teoria). Studiare flusso OAuth2 e PKCE.
+- Giorno 31-32: OAuth2 — Implementazione Google & GitHub. Creare GoogleStrategy e GithubStrategy.
+- Giorno 33-34: RBAC con Decoratori Custom & Guards. Creare decoratore @Roles() e RolesGuard.
+
+--------------------------------------------------------------------------------------------------------
+
+FASE 03: Angular — SPA, PWA, Routing, State Management (Giorni 41–82)
+
+- Giorno 41-43: Angular — Fondamentali. Installare CLI, studiare Componenti, Template, Services, Signals, RxJS base.
+- Giorno 44-45: Routing & Route Guards. Configurare lazy loading, creare AuthGuard e RoleGuard.
+- Giorno 46-47: HTTP Client & JWT Interceptor. Creare interceptor per token JWT e refresh automatico.
+- Giorno 48-50: Pagine Auth — Login, Register, OAuth. Installare Tailwind, creare form con Reactive Forms, bottoni OAuth.
+- Giorno 51-55: Homepage, Catalogo & Dettaglio Corso. Creare homepage, catalogo con filtri, ricerca con debounce, pagina dettaglio corso.
+- Giorno 56-61: Player Lezione & Dashboard Studente. Creare layout player, componente quiz, dashboard studente con Angular Signals.
+- Giorno 62-68: Dashboard Instructor & Admin Panel. Creare form creazione corso, editor lezione, admin panel con tabelle e analytics.
+- Giorno 69-72: PWA — Service Worker, Manifest, Offline. Aggiungere @angular/pwa, configurare ngsw-config.json, testare offline.
+- Giorno 73: Integration Test Frontend ↔ Backend. Testare flusso completo end-to-end. [MILESTONE]
+
+--------------------------------------------------------------------------------------------------------
+
+FASE 04: Redis — Caching, Rate Limiting, Load Balancer & Sessioni (Giorni 74–87)
+
+- Giorno 74: Redis — Strutture Dati & CLI. Studiare strutture dati Redis, connettersi con redis-cli.
+- Giorno 75-77: Caching in NestJS con Redis. Configurare CacheModule, implementare cache manuale e cache invalidation.
+- Giorno 78-79: Rate Limiting con Redis. Configurare @nestjs/throttler con Redis store, differenziare regole per endpoint.
+- Giorno 80-83: Load Balancer — Teoria Approfondita. Studiare concetti base, configurare Nginx localmente come reverse proxy, dimostrare problema delle sessioni in-memory, studiare AWS ALB.
+- Giorno 84: Performance Benchmark — con e senza Redis. Eseguire load test con autocannon. [MILESTONE]
+
+--------------------------------------------------------------------------------------------------------
+
+FASE 05: BullMQ — Job Queue, Workers & Task Asincroni (Giorni 85–98)
+
+- Giorno 85-86: BullMQ — Setup & Primo Job. Installare @nestjs/bullmq, configurare coda 'email', creare Processor.
+- Giorno 87-89: Email System con Nodemailer. Configurare Mailgun, creare template email, job di benvenuto e conferma iscrizione.
+- Giorno 90-93: Generazione Certificati PDF. Creare job per generare PDF con Puppeteer, salvare su filesystem.
+- Giorno 94-96: Job Schedulati con BullMQ Repeatable. Creare job giornalieri, settimanali e notturni. Installare Bull Board dashboard.
+- Giorno 97: Stress Test delle Code. Simulare 1000 iscrizioni e monitorare la dashboard. [MILESTONE]
+
+--------------------------------------------------------------------------------------------------------
+
+FASE 06: Pagamenti — Braintree (Visa/Mastercard) + PayPal (Giorni 98–111)
+
+- Giorno 98-99: Braintree — Setup & Teoria. Creare account sandbox, studiare flusso Client Token -> Nonce -> Transaction.
+- Giorno 100-103: Acquisto Singolo Corso — Visa/Mastercard. Integrare Drop-in UI in Angular, creare endpoint checkout nel backend.
+- Giorno 104-107: PayPal Nativo & Abbonamento Mensile. Configurare PayPal nel Drop-in, creare endpoint per subscription, gestire webhook.
+- Giorno 108: Test Pagamenti — Tutte le Carte di Test. Testare transazioni e webhook. [MILESTONE]
+
+--------------------------------------------------------------------------------------------------------
+
+FASE 07: AWS S3 + CloudFront — Storage & CDN (Giorni 109–120)
+
+- Giorno 109-110: AWS IAM & S3 Setup. Creare account AWS, utente IAM, bucket S3 (media e private).
+- Giorno 111-113: Presigned URL Upload & NestJS Integration. Creare endpoint per generare URL presigned, integrare upload diretto in Angular.
+- Giorno 114-116: CloudFront — CDN Setup & Contenuto Protetto. Creare distribuzione CloudFront, configurare OAC, generare Signed URLs per video protetti.
+- Giorno 117: Review Storage & CDN. Verificare upload e distribuzione dei contenuti. [MILESTONE]
+
+--------------------------------------------------------------------------------------------------------
+
+FASE 08: Docker Completo + CI/CD GitLab + AWS ECS + Load Balancer (Giorni 118–138)
+
+- Giorno 118-120: Docker — Teoria Completa + Multi-stage Builds. Studiare Docker, creare Dockerfile multi-stage per NestJS e Angular.
+- Giorno 121-122: Docker Compose di Produzione. Aggiornare docker-compose.yml con servizi backend e frontend, aggiungere Nginx come reverse proxy.
+- Giorno 123-126: GitLab CI/CD — Pipeline Completa. Scrivere .gitlab-ci.yml con stage test, build, push, deploy.
+- Giorno 127-131: AWS ECS Fargate — Deploy in Cloud. Creare ECS Cluster, Task Definition, usare RDS PostgreSQL e ElastiCache Redis.
+- Giorno 132-135: Application Load Balancer & HTTPS. Creare ALB, configurare certificati SSL, listener rules, auto-scaling.
+- Giorno 136: CloudWatch Monitoring & Alarms. Configurare dashboard e allarmi. [MILESTONE]
+
+--------------------------------------------------------------------------------------------------------
+
+FASE 09: Testing, Security, Polish & Portfolio (Giorni 137–152)
+
+- Giorno 137-141: Test Suite Completa. Scrivere unit test e integration test per backend e frontend, raggiungere coverage target.
+- Giorno 142-145: Security Hardening & Performance. Implementare helmet, audit dipendenze, analizzare performance e bundle.
+- Giorno 146-149: Documentazione & README Professionale. Scrivere README con architettura, decisioni tecniche e setup locale.
+- Giorno 150-152: Demo Video & Portfolio Presentation. Registrare demo video e preparare presentazione per colloqui. [PROGETTO COMPLETATO]
