@@ -2,18 +2,18 @@
 const STORAGE_KEY = 'ysh_progress';
 
 const PHASE_SCHEDULE = [
-  { id:'ph0', name:'Fondamenta',    start:1,   end:6,   color:'#9B7CF4' },
-  { id:'ph1', name:'NestJS',        start:7,   end:34,  color:'#3DD6C8' },
-  { id:'ph2', name:'Auth',          start:35,  end:48,  color:'#FF6B7A' },
-  { id:'ph3', name:'Angular',       start:49,  end:90,  color:'#4A9EFF' },
-  { id:'ph4', name:'Redis / LB',    start:91,  end:104, color:'#52D48A' },
-  { id:'ph5', name:'BullMQ',        start:105, end:118, color:'#FF9F4A' },
-  { id:'ph6', name:'Pagamenti',     start:119, end:132, color:'#4AC8FF' },
-  { id:'ph7', name:'AWS S3',        start:133, end:144, color:'#F4C553' },
-  { id:'ph8', name:'Docker/DevOps', start:145, end:165, color:'#4A9EFF' },
-  { id:'ph9', name:'Testing',       start:166, end:181, color:'#9B7CF4' }
+  { id:'ph0', name:'01 Setup/TS/DB',   start:1,   end:7,   color:'#9B7CF4' },
+  { id:'ph1', name:'02 NestJS Core',   start:8,   end:24,  color:'#3DD6C8' },
+  { id:'ph2', name:'03 Auth',          start:25,  end:35,  color:'#FF6B7A' },
+  { id:'ph3', name:'04 Angular',       start:36,  end:56,  color:'#4A9EFF' },
+  { id:'ph4', name:'05 Redis',         start:57,  end:66,  color:'#52D48A' },
+  { id:'ph5', name:'06 BullMQ',        start:67,  end:77,  color:'#FF9F4A' },
+  { id:'ph6', name:'07 Pagamenti',     start:78,  end:88,  color:'#4AC8FF' },
+  { id:'ph7', name:'08 AWS/Deploy',    start:89,  end:100, color:'#F4C553' },
+  { id:'ph8', name:'09 Testing/Sec',   start:101, end:111, color:'#4A9EFF' },
+  { id:'ph9', name:'10 Portfolio',     start:112, end:125, color:'#9B7CF4' }
 ];
-const TOTAL_DAYS = 181;
+const TOTAL_DAYS = 125;
 
 // ===== DATA LAYER =====
 function loadData() {
@@ -122,7 +122,7 @@ function initCheckboxes() {
 // ===== PROGRESS BAR =====
 function updateProgress() {
   const phaseColors = ['purple','teal','rose','blue','green','orange','cyan','gold','blue','purple'];
-  const phaseNames  = ['Fondamenta','NestJS','Auth','Angular','Redis/LB','BullMQ','Pagamenti','AWS S3','Docker/DevOps','Testing'];
+  const phaseNames  = ['01 Setup','02 NestJS','03 Auth','04 Angular','05 Redis','06 BullMQ','07 Pagamenti','08 Deploy','09 Testing','10 Portfolio'];
   let totalDone = 0, totalAll = 0;
   const phaseStats = [];
 
