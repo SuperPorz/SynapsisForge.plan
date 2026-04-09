@@ -1,4 +1,4 @@
-Nome Progetto: YouStudent Hub
+Nome Progetto: SynapsisForge (ex-YouStudent)
 Stack: Angular · NestJS · PostgreSQL · MongoDB · Redis · Braintree/PayPal · AWS · Docker (tardivo) · CI/CD GitLab
 
 --------------------------------------------------------------------------------------------------------
