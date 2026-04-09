@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Student Hub — Project Plan v2</title>
+<title>SynapsisForge — Project Plan v2</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
 </head>
@@ -12,7 +12,7 @@
 
   <div class="header">
     <div class="header-tag">// Portfolio Project — Piano Operativo v2</div>
-    <h1>YouStudent <span>Hub</span></h1>
+    <h1>SynapsisForge <span>Plan</span></h1>
     <div class="header-sub">Angular · NestJS · PostgreSQL · MongoDB · Redis · Braintree/PayPal · AWS · Docker (tardivo) · CI/CD GitLab</div>
     <div class="rainbow-bar"></div>
   </div>
@@ -133,7 +133,7 @@
             <div class="day-title">Architettura & ambiente di sviluppo</div>
             <ul class="day-tasks">
               <li>Installa: <strong>Node.js 20, VS Code, Git, Postman, MongoDB Compass, pgAdmin</strong></li>
-              <li>Crea il monorepo: <strong>youstudent-hub/backend/</strong>, <strong>frontend/</strong>, <strong>infra/</strong></li>
+              <li>Crea il monorepo: <strong>SynapsisForge-hub/backend/</strong>, <strong>frontend/</strong>, <strong>infra/</strong></li>
               <li>Disegna su carta o Excalidraw l'architettura completa: Angular → NestJS → PostgreSQL + MongoDB + Redis → S3 → Braintree</li>
               <li>Inizializza il repository Git, crea <strong>.gitignore</strong> per Node e il file <strong>.env.example</strong></li>
             </ul>
@@ -147,7 +147,7 @@
               <li>Crea <strong>infra/docker-compose.yml</strong> con tre servizi: <strong>postgres:16</strong>, <strong>mongo:7</strong>, <strong>redis:7</strong></li>
               <li>Configura volumi per la persistenza dei dati, esponi le porte standard (5432, 27017, 6379)</li>
               <li>Avvia con <strong>docker-compose up -d</strong> e verifica le connessioni con pgAdmin, MongoDB Compass e redis-cli</li>
-              <li>Crea il database <strong>youstudent</strong> in PostgreSQL e sperimenta i tipi UUID, JSONB, TIMESTAMPTZ</li>
+              <li>Crea il database <strong>SynapsisForge</strong> in PostgreSQL e sperimenta i tipi UUID, JSONB, TIMESTAMPTZ</li>
             </ul>
             <div class="tip-box"><strong>💡 Solo i DB in Docker:</strong> l'app la tieni locale per ora — hot-reload più veloce, debug più semplice. Imparerai a containerizzare l'app nella Fase 09.</div>
           </div>
@@ -1271,7 +1271,7 @@
           <div class="day-content-col">
             <div class="day-title">Abbonamento mensile — Braintree Subscription</div>
             <ul class="day-tasks">
-              <li>Crea un <strong>Plan</strong> su Braintree Dashboard: prezzo mensile, nome "YouStudent Pro"</li>
+              <li>Crea un <strong>Plan</strong> su Braintree Dashboard: prezzo mensile, nome "SynapsisForge Pro"</li>
               <li>Endpoint <strong>POST /payments/subscribe</strong>: crea un Customer Braintree con Vault del metodo di pagamento, avvia la Subscription</li>
               <li>Salva il <strong>subscriptionId</strong> Braintree nel record User — serve per gestire rinnovi e cancellazioni</li>
               <li>Aggiorna il campo <strong>plan</strong> dell'utente (free/pro) in base allo stato della subscription</li>
@@ -1371,7 +1371,7 @@
             <ul class="day-tasks">
               <li>Crea account AWS (free tier). <strong>Mai usare il root account</strong>: crea un utente IAM con permessi solo S3</li>
               <li><strong>Studia IAM (1h):</strong> Users, Groups, Roles, Policy. Principio del minimo privilegio.</li>
-              <li>Crea il bucket S3 <strong>youstudent-media</strong> (video e immagini pubblici) e <strong>youstudent-private</strong> (certificati PDF)</li>
+              <li>Crea il bucket S3 <strong>SynapsisForge-media</strong> (video e immagini pubblici) e <strong>SynapsisForge-private</strong> (certificati PDF)</li>
               <li>Installa <strong>@aws-sdk/client-s3 @aws-sdk/s3-request-presigner</strong> nel backend</li>
             </ul>
           </div>
@@ -1432,7 +1432,7 @@
               <li><strong>Studia (1.5h):</strong> multi-stage Docker build — stage builder e stage production, perché riduce la dimensione dell'immagine</li>
               <li>Scrivi il <strong>Dockerfile</strong> per il backend: <strong>node:20-alpine</strong> come base, copia solo dist/ e node_modules production</li>
               <li>Scrivi il <strong>Dockerfile</strong> per il frontend Angular: stage builder (<strong>ng build --configuration production</strong>), stage finale <strong>nginx:alpine</strong></li>
-              <li>Testa le immagini localmente: <strong>docker build -t youstudent-backend .</strong> e verifica che l'app si avvii</li>
+              <li>Testa le immagini localmente: <strong>docker build -t SynapsisForge-backend .</strong> e verifica che l'app si avvii</li>
             </ul>
           </div>
         </div>
@@ -1856,7 +1856,7 @@
               <li>Identifica le tecnologie che vuoi approfondire per il prossimo progetto o il prossimo ruolo</li>
               <li>Aggiorna il piano giorno per giorno su questo tracker — hai completato il 100%!</li>
             </ul>
-            <div class="tip-box"><strong>🏆 PROGETTO COMPLETATO</strong> — YouStudent Hub: Angular · NestJS · PostgreSQL · MongoDB · Redis · BullMQ · Braintree/PayPal · AWS S3 · Docker · GitLab CI/CD</div>
+            <div class="tip-box"><strong>🏆 PROGETTO COMPLETATO</strong> — SynapsisForge: Angular · NestJS · PostgreSQL · MongoDB · Redis · BullMQ · Braintree/PayPal · AWS S3 · Docker · GitLab CI/CD</div>
           </div>
         </div>
       </div>
@@ -1864,7 +1864,7 @@
   </div>
   </div>
   <div class="footer">
-    // YouStudent Hub — Piano Operativo v3 &middot; 125 giorni &middot; ~500 ore &middot; 4h/giorno
+    // SynapsisForge — Piano Operativo v3 &middot; 125 giorni &middot; ~500 ore &middot; 4h/giorno
   </div>
 
 </div>
