@@ -20,7 +20,7 @@
   <!-- PROGRESS TRACKING BOX -->
   <div class="progress-box">
     <div class="progress-header">
-      <div class="progress-title">📊 Project Progress</div>
+      <div class="progress-title">📊 Progressi del progetto</div>
       <div class="progress-percentage"><span id="totalPercentage">0</span>%</div>
     </div>
     <div class="progress-bar-container">
@@ -35,28 +35,11 @@
   </div>
 
 
-  <!-- PLANNED VS ACTUAL -->
+  <!-- VELOCITY DASHBOARD -->
   <div class="pva-box" id="plannedVsActualBox">
-    <div class="pva-header">
-      <div class="pva-title">&#128200; Planned vs Actual</div>
-      <div class="pva-status" id="pvaStatus">&#8212;</div>
+    <div class="pva-note" id="pvaNote">
+      Imposta la data di inizio con il pulsante "Data Inizio" per attivare le stime di completamento.
     </div>
-    <div class="pva-grid">
-      <div class="pva-item">
-        <div class="pva-item-label">Pianificato ad oggi</div>
-        <div class="pva-item-bar-wrap"><div class="pva-item-bar planned-bar" id="plannedBar"></div></div>
-        <div class="pva-item-value" id="plannedPct">0%</div>
-      </div>
-      <div class="pva-item">
-        <div class="pva-item-label">Completato reale</div>
-        <div class="pva-item-bar-wrap"><div class="pva-item-bar actual-bar" id="actualBar"></div></div>
-        <div class="pva-item-value" id="actualPct">0%</div>
-      </div>
-    </div>
-    <div class="pva-chart-wrap">
-      <svg id="pvaSvg" width="100%" height="80" viewBox="0 0 700 80" preserveAspectRatio="xMidYMid meet"></svg>
-    </div>
-    <div class="pva-note" id="pvaNote">Imposta la data di inizio con il pulsante "Data Inizio" per attivare il confronto.</div>
   </div>
 
   <!-- GANTT CHART -->
@@ -64,9 +47,12 @@
     <div class="gantt-header-row">
       <div class="gantt-title">&#128197; Gantt &mdash; Avanzamento per Fase</div>
       <div class="gantt-legend">
-        <span class="gantt-leg-item"><span class="gantt-leg-dot" style="background:rgba(255,255,255,0.12)"></span>Pianificato</span>
-        <span class="gantt-leg-item"><span class="gantt-leg-dot" style="background:rgba(61,214,200,0.7)"></span>Completato</span>
-        <span class="gantt-leg-item" id="todayLegend" style="display:none"><span class="gantt-leg-dot" style="background:#F4C553"></span>Oggi</span>
+        <span class="gantt-leg-item"><span class="gantt-leg-dot" style="background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.15)"></span>Pianificato</span>
+        <span class="gantt-leg-item"><span class="gantt-leg-dot" style="background:#52D48A"></span>Completato</span>
+        <span class="gantt-leg-item"><span class="gantt-leg-dot" style="background:#FF6B7A"></span>In ritardo</span>
+        <span class="gantt-leg-item"><span class="gantt-leg-dot" style="background:var(--gold)"></span>Oggi</span>
+        <span class="gantt-leg-item" id="estEndLegend" style="display:none"><span class="gantt-leg-dot"></span>Fine stimata</span>
+        <span class="gantt-leg-item" id="todayLegend" style="display:none"></span>
       </div>
     </div>
     <div class="gantt-scroll" id="ganttScroll">
@@ -1698,7 +1684,7 @@
               <li>Scrivi un seed completo e realistico: 5 categorie, 8 corsi, 3 instructor, 30 studenti, iscrizioni, pagamenti, certificati</li>
               <li>I corsi devono avere contenuti reali: almeno 3 lezioni con descrizione significativa per ognuno</li>
               <li>Popola le recensioni con rating misti e commenti realistici</li>
-              <li>Crea 3 account demo con credenziali nel README: student@demo.com, instructor@demo.com, admin@demo.com</li>
+              <li>Crea 3 account demo con credenziali nel README: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="790a0d0c1d1c170d391d1c1416571a1614">[email&#160;protected]</a>, <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="2a4344595e585f495e45586a4e4f474504494547">[email&#160;protected]</a>, <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="0e6f6a6367604e6a6b6361206d6163">[email&#160;protected]</a></li>
             </ul>
           </div>
         </div>
@@ -1856,18 +1842,15 @@
               <li>Identifica le tecnologie che vuoi approfondire per il prossimo progetto o il prossimo ruolo</li>
               <li>Aggiorna il piano giorno per giorno su questo tracker — hai completato il 100%!</li>
             </ul>
-            <div class="tip-box"><strong>🏆 PROGETTO COMPLETATO</strong> — SynapsisForge: Angular · NestJS · PostgreSQL · MongoDB · Redis · BullMQ · Braintree/PayPal · AWS S3 · Docker · GitLab CI/CD</div>
+            <div class="tip-box"><strong>🏆 PROGETTO COMPLETATO</strong> — SynapsisForge: Angular · NestJS · PostgreSQL · MongoDB · Redis · Braintree · AWS · Docker · GitLab CI — Portfolio completato!</div>
           </div>
         </div>
       </div>
     </div>
   </div>
-  </div>
-  <div class="footer">
-    // SynapsisForge — Piano Operativo v3 &middot; 125 giorni &middot; ~500 ore &middot; 4h/giorno
-  </div>
 
-</div>
+</div><!-- /.wrapper -->
+
 <script src="script.js"></script>
 </body>
 </html>

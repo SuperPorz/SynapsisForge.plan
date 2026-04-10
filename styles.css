@@ -99,7 +99,7 @@ body::before {
 .action-btn-export { background: rgba(244,197,83,0.1); color: var(--gold); border-color: rgba(244,197,83,0.3); }
 .action-btn-date   { background: rgba(155,124,244,0.1); color: var(--purple); border-color: rgba(155,124,244,0.3); }
 
-/* PLANNED VS ACTUAL BOX */
+/* PLANNED VS ACTUAL BOX → VELOCITY DASHBOARD */
 .pva-box {
   padding: 24px;
   background: var(--bg2);
@@ -107,18 +107,84 @@ body::before {
   border-radius: 4px;
   margin-bottom: 24px;
 }
-.pva-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+.pva-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 8px; }
 .pva-title { font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 700; color: #fff; }
-.pva-status { font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700; color: var(--gold); }
-.pva-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; }
-.pva-item-label { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 8px; }
-.pva-item-bar-wrap { height: 10px; background: rgba(255,255,255,0.06); border-radius: 5px; overflow: hidden; margin-bottom: 6px; }
-.pva-item-bar { height: 100%; width: 0%; border-radius: 5px; transition: width 0.4s ease; }
-.planned-bar { background: linear-gradient(90deg, var(--purple), rgba(155,124,244,0.6)); }
-.actual-bar  { background: linear-gradient(90deg, var(--teal), rgba(61,214,200,0.6)); }
-.pva-item-value { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 700; color: #fff; }
-.pva-chart-wrap { margin-top: 8px; }
-.pva-note { font-size: 11px; color: var(--muted); margin-top: 12px; font-style: italic; }
+.pva-status { font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700; }
+.pva-note { font-size: 11px; color: var(--muted); font-style: italic; }
+
+/* Velocity grid */
+.vel-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+.vel-card {
+  padding: 18px 20px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+}
+.vel-card-main {
+  border-color: rgba(244,197,83,0.25);
+  background: linear-gradient(135deg, rgba(244,197,83,0.06) 0%, rgba(13,18,36,0) 100%);
+}
+.vel-card-label {
+  font-size: 10px; color: var(--muted); text-transform: uppercase;
+  letter-spacing: 0.12em; margin-bottom: 10px;
+}
+.vel-card-value {
+  font-family: 'Syne', sans-serif; font-size: 26px; font-weight: 800;
+  line-height: 1.1; margin-bottom: 6px;
+}
+.vel-end-date { font-size: 22px; }
+.vel-card-sub { font-size: 11px; color: var(--muted); }
+
+/* KPI group */
+.vel-kpi-group {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.vel-kpi {
+  padding: 12px 14px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+}
+.vel-kpi-label { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 6px; }
+.vel-kpi-value { font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 700; color: #fff; line-height: 1; }
+.vel-kpi-total { font-size: 13px; color: var(--muted); font-weight: 400; }
+
+/* Burn bar */
+.vel-burn-wrap { margin-top: 4px; }
+.vel-burn-labels {
+  display: flex; gap: 16px; font-size: 10px; letter-spacing: 0.06em;
+  text-transform: uppercase; margin-bottom: 8px; flex-wrap: wrap;
+}
+.vel-burn-bar {
+  position: relative; height: 12px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 6px; overflow: visible;
+  border: 1px solid var(--border);
+}
+.vel-burn-done {
+  height: 100%; border-radius: 6px;
+  background: linear-gradient(90deg, var(--teal), rgba(61,214,200,0.7));
+  transition: width 0.4s ease;
+}
+.vel-burn-pace {
+  position: absolute; top: -4px;
+  width: 2px; height: 20px;
+  background: var(--gold);
+  transform: translateX(-50%);
+  border-radius: 1px;
+}
+.vel-burn-axis {
+  display: flex; position: relative;
+  font-size: 10px; color: var(--muted);
+  margin-top: 6px; letter-spacing: 0.06em;
+  min-height: 16px;
+}
 
 /* GANTT BOX */
 .gantt-box {
@@ -136,55 +202,92 @@ body::before {
 .gantt-scroll { overflow-x: auto; overflow-y: visible; cursor: grab; padding-bottom: 8px; }
 .gantt-scroll:active { cursor: grabbing; }
 
-/* Gantt inner elements (positioned absolutely inside .gantt-root) */
+/* Gantt root (absolute positioning context) */
 .gantt-root { position: relative; }
+
+/* Row label */
 .gantt-row-label {
-  position: absolute;
-  font-size: 10px;
-  color: var(--muted);
-  text-align: right;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  line-height: 26px;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
+  position: absolute; left: 0;
+  display: flex; align-items: center;
+  font-size: 9.5px; color: var(--muted);
+  text-align: right; justify-content: flex-end;
+  padding-right: 8px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  letter-spacing: 0.04em; text-transform: uppercase;
 }
-.gantt-bar-bg, .gantt-bar-fill { position: absolute; }
-.gantt-bar-label {
+
+/* Ghost bar (planned layer) */
+.gantt-ghost-bar {
+  position: absolute;
+  border: 1px solid;
+  border-radius: 3px;
+  background: transparent;
+  pointer-events: none;
+}
+
+/* Per-day cell states */
+.gantt-day-done,
+.gantt-day-partial,
+.gantt-day-today-cell,
+.gantt-day-overdue,
+.gantt-day-future,
+.gantt-day-empty,
+.gantt-day-partial-fill {
+  position: absolute;
+  border-radius: 2px;
+}
+.gantt-day-done      { opacity: 1; }
+.gantt-day-partial   { opacity: 0.55; }
+.gantt-day-today-cell { opacity: 0.9; box-shadow: 0 0 6px rgba(244,197,83,0.5); }
+.gantt-day-overdue   { opacity: 0.75; }
+.gantt-day-future    { opacity: 1; }
+.gantt-day-empty     { background: transparent; }
+.gantt-day-partial-fill { opacity: 1; border-radius: 0 0 2px 2px; }
+
+/* Phase % label */
+.gantt-phase-pct {
   position: absolute;
   font-family: 'Syne', sans-serif;
-  font-size: 9px;
-  font-weight: 700;
-  color: rgba(255,255,255,0.7);
-  pointer-events: none;
-  line-height: 1;
+  font-size: 9px; font-weight: 700;
+  white-space: nowrap; pointer-events: none;
 }
+
+/* Week tick lines */
 .gantt-tick {
-  position: absolute;
-  width: 1px;
-  background: rgba(255,255,255,0.04);
+  position: absolute; top: 0;
+  width: 1px; background: rgba(255,255,255,0.04);
 }
 .gantt-tick-label {
   position: absolute;
-  font-size: 8px;
-  color: var(--muted);
-  white-space: nowrap;
-  letter-spacing: 0.04em;
+  font-size: 8px; color: var(--muted);
+  white-space: nowrap; letter-spacing: 0.04em;
 }
+
+/* Today line */
 .gantt-today {
-  position: absolute;
-  width: 2px;
-  background: var(--gold);
-  opacity: 0.8;
-  z-index: 10;
+  position: absolute; width: 2px;
+  background: var(--gold); opacity: 0.9; z-index: 10;
 }
-.gantt-day-dot {
+.gantt-today-label {
   position: absolute;
-  width: 3px;
-  height: 3px;
-  border-radius: 50%;
-  z-index: 5;
+  font-size: 8px; color: var(--gold);
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: 0.06em; text-transform: uppercase;
+  transform: translateX(-50%); z-index: 10;
+}
+
+/* Estimated end line */
+.gantt-est-line {
+  position: absolute; width: 2px;
+  opacity: 0.85; z-index: 9;
+  background: var(--green);
+}
+.gantt-est-label {
+  position: absolute;
+  font-size: 8px;
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: 0.06em; text-transform: uppercase;
+  transform: translateX(-50%); z-index: 9;
 }
 
 /* NOTE BOX */
@@ -323,8 +426,12 @@ code {
   .stats { grid-template-columns: 1fr 1fr; }
   .phase-header { grid-template-columns: 36px 1fr auto; gap: 10px; }
   .phase-num { font-size: 18px; }
-  .pva-grid { grid-template-columns: 1fr; }
+  .vel-grid { grid-template-columns: 1fr; }
+  .vel-kpi-group { grid-template-columns: 1fr 1fr; }
   .phase-progress-list { grid-template-columns: 1fr; }
   .progress-actions { gap: 6px; }
   .action-btn { font-size: 10px; padding: 7px 12px; }
+  .vel-card-value { font-size: 20px; }
+  .vel-end-date { font-size: 18px; }
+  .vel-burn-labels { gap: 8px; }
 }
