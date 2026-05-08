@@ -87,9 +87,9 @@
     "ph1-task-22-82": true,
     "ph1-task-23-83": true,
     "ph1-task-23-84": true,
-    "ph1-task-23-85": false,
-    "ph1-task-23-86": false,
-    "ph1-task-24-87": false,
+    "ph1-task-23-85": true,
+    "ph1-task-23-86": true,
+    "ph1-task-24-87": true,
     "ph1-task-24-88": false,
     "ph1-task-24-89": false,
     "ph1-task-24-90": false,
@@ -496,5 +496,5 @@
     "ph9-task-125-491": false,
     "ph9-task-125-492": false
   },
-  "exportedAt": "2026-05-07T01:52:09.792Z"
+  "exportedAt": "2026-05-08T23:39:49.981Z"
 }
