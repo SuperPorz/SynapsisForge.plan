@@ -475,6 +475,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   updateAll();
 
-  // Keep first phase open // CAMBIARE FASE QUI
-  document.getElementById('ph2')?.classList.add('open');
+  // Keep a choosen phase open // CAMBIARE FASE QUI
+  document.getElementById('ph3')?.classList.add('open');
 });
