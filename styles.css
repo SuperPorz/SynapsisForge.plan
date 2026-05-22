@@ -86,19 +86,6 @@ body::before {
 .phase-progress-bar-fill { height: 100%; background: var(--teal); width: 0%; transition: width 0.3s ease; }
 .phase-progress-value { font-family: 'Syne', sans-serif; font-size: 12px; font-weight: 600; color: var(--gold); }
 
-/* IMPORT / EXPORT BUTTONS */
-.progress-actions { display: flex; gap: 8px; flex-wrap: wrap; }
-.action-btn {
-  padding: 8px 16px; border: 1px solid; border-radius: 3px;
-  font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 600;
-  cursor: pointer; transition: opacity 0.2s, transform 0.1s; letter-spacing: 0.05em;
-}
-.action-btn:hover { opacity: 0.85; transform: translateY(-1px); }
-.action-btn:active { transform: translateY(0); }
-.action-btn-import { background: rgba(61,214,200,0.1); color: var(--teal); border-color: rgba(61,214,200,0.3); }
-.action-btn-export { background: rgba(244,197,83,0.1); color: var(--gold); border-color: rgba(244,197,83,0.3); }
-.action-btn-date   { background: rgba(155,124,244,0.1); color: var(--purple); border-color: rgba(155,124,244,0.3); }
-
 /* PLANNED VS ACTUAL BOX → VELOCITY DASHBOARD */
 .pva-box {
   padding: 24px;
@@ -429,8 +416,6 @@ code {
   .vel-grid { grid-template-columns: 1fr; }
   .vel-kpi-group { grid-template-columns: 1fr 1fr; }
   .phase-progress-list { grid-template-columns: 1fr; }
-  .progress-actions { gap: 6px; }
-  .action-btn { font-size: 10px; padding: 7px 12px; }
   .vel-card-value { font-size: 20px; }
   .vel-end-date { font-size: 18px; }
   .vel-burn-labels { gap: 8px; }
