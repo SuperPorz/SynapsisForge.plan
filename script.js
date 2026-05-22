@@ -35,8 +35,9 @@ async function inizializzaApplicazione() {
     console.log("Fetch forzato del JSON dalla repository in corso...");
     
     // 2. Fetch sempre attivo con cache-buster per avere i dati in tempo reale ad ogni refresh
-    const response = await fetch(`./progress_default.json?t=${new Date().getTime()}`); 
-    if (!response.ok) throw new Error('File JSON non trovato sul server');
+    const RAW_URL = 'https://raw.githubusercontent.com/SuperPorz/SynapsisForge.plan/main/progress_default.json';
+    const response = await fetch(`${RAW_URL}?t=${Date.now()}`);
+    if (!response.ok) throw new Error(`File JSON non trovato: ${response.status}`);
     
     const repoData = await response.json();
     
