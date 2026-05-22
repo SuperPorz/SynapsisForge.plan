@@ -1,6 +1,4 @@
 // ===== CONSTANTS =====
-const STORAGE_KEY = 'ysh_progress';
-
 const PHASE_SCHEDULE = [
   { id:'ph0', name:'01 Setup/TS/DB',   start:1,   end:7,   color:'#9B7CF4' },
   { id:'ph1', name:'02 NestJS Core',   start:8,   end:24,  color:'#3DD6C8' },
@@ -14,145 +12,46 @@ const PHASE_SCHEDULE = [
   { id:'ph9', name:'10 Portfolio',     start:112, end:125, color:'#9B7CF4' }
 ];
 const TOTAL_DAYS = 125;
+const RAW_URL = 'https://raw.githubusercontent.com/SuperPorz/SynapsisForge.plan/main/progress_default.json';
 
-// ===== DATA LAYER =====
-function loadData() {
-  try {
-    return JSON.parse(localStorage.getItem(STORAGE_KEY)) || { version:2, startDate:null, progress:{} };
-  } catch { return { version:2, startDate:null, progress:{} }; }
-}
+// ===== APP STATE =====
+let appData = { startDate: null, progress: {} };
 
-function saveData(data) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-}
-
-// ===== ALWAYS FETCH FROM REPO =====
+// ===== INIT =====
 async function inizializzaApplicazione() {
+  initCheckboxes();
   try {
-    // 1. Generiamo i checkbox nel DOM
-    initCheckboxes();
-
-    console.log("Fetch forzato del JSON dalla repository in corso...");
-    
-    // 2. Fetch sempre attivo con cache-buster per avere i dati in tempo reale ad ogni refresh
-    const RAW_URL = 'https://raw.githubusercontent.com/SuperPorz/SynapsisForge.plan/main/progress_default.json';
     const response = await fetch(`${RAW_URL}?t=${Date.now()}`);
-    if (!response.ok) throw new Error(`File JSON non trovato: ${response.status}`);
-    
-    const repoData = await response.json();
-    
-    // 3. Salviamo comunque nel localStorage come backup temporaneo per le funzioni interne dello script
-    saveData(repoData);
-
-    // 4. Applichiamo i dati del server ai checkbox del DOM
-    applyProgress(repoData.progress);
-    
-    // 5. Renderizziamo la dashboard e il Gantt
-    updateAll();
-    console.log("Applicazione sincronizzata con successo con il JSON della repo.");
-
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    appData = await response.json();
+    applyProgress(appData.progress);
   } catch (error) {
-    console.error("Errore durante il fetch dal server, provo il recupero locale:", error);
-    // Fallback: se GitHub è giù o l'utente è offline, carica i vecchi dati locali (se presenti)
-    const backupData = loadData();
-    applyProgress(backupData.progress);
-    updateAll();
+    console.error('Fetch JSON fallito:', error);
   }
-}
-
-// ===== IMPORT / EXPORT =====
-function exportJSON() {
-  const data = loadData();
-  data.progress = collectProgress();
-  data.exportedAt = new Date().toISOString();
-  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = 'progress.json';
-  a.click();
-  URL.revokeObjectURL(a.href);
-}
-
-// L'importazione manuale sovrascrive temporaneamente il localStorage per la sessione corrente
-function importJSON() {
-  const input = document.createElement('input');
-  input.type = 'file';
-  input.accept = '.json';
-  input.onchange = e => {
-    const file = e.target.files[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = ev => {
-      try {
-        const data = JSON.parse(ev.target.result);
-        const current = loadData();
-        current.progress = data.progress || {};
-        if (data.startDate) current.startDate = data.startDate;
-        saveData(current);
-        applyProgress(current.progress);
-        updateAll();
-      } catch { alert('File JSON non valido'); }
-    };
-    reader.readAsText(file);
-  };
-  input.click();
-}
-
-// ===== DATE PROMPT =====
-function promptStartDate() {
-  const data = loadData();
-  const cur = data.startDate || new Date().toISOString().slice(0,10);
-  const date = prompt('Data di inizio progetto (YYYY-MM-DD):', cur);
-  if (date && /^\d{4}-\d{2}-\d{2}$/.test(date)) {
-    data.startDate = date;
-    saveData(data);
-    updateAll();
-  }
+  updateAll();
 }
 
 // ===== CHECKBOXES =====
-function collectProgress() {
-  const progress = {};
-  document.querySelectorAll('.phase-checkbox').forEach(cb => { progress[cb.id] = cb.checked; });
-  return progress;
+function initCheckboxes() {
+  document.querySelectorAll('.day-tasks li').forEach((li, globalIdx) => {
+    let phaseId = '';
+    for (let i = 0; i <= 9; i++) {
+      if (li.closest('.ph' + i)) { phaseId = 'ph' + i; break; }
+    }
+    const dayNum = li.closest('.day-row')?.querySelector('.day-number')?.textContent?.trim() || '0';
+    const cb = document.createElement('input');
+    cb.type = 'checkbox';
+    cb.id = `${phaseId}-task-${dayNum}-${globalIdx}`;
+    cb.className = 'phase-checkbox';
+    cb.checked = false;
+    li.insertBefore(cb, li.firstChild);
+  });
 }
 
 function applyProgress(progressData) {
   if (!progressData) return;
   document.querySelectorAll('.phase-checkbox').forEach(cb => {
-    if (progressData.hasOwnProperty(cb.id)) {
-      cb.checked = !!progressData[cb.id];
-    } else {
-      cb.checked = false;
-    }
-  });
-}
-
-function initCheckboxes() {
-  document.querySelectorAll('.day-tasks li').forEach((li, globalIdx) => {
-    let phaseId = '';
-    for (let i = 0; i <= 9; i++) {
-      const el = li.closest('.ph' + i);
-      if (el) { phaseId = 'ph' + i; break; }
-    }
-    const dayNum = li.closest('.day-row')?.querySelector('.day-number')?.textContent?.trim() || '0';
-    const cbId = `${phaseId}-task-${dayNum}-${globalIdx}`;
-
-    const cb = document.createElement('input');
-    cb.type = 'checkbox';
-    cb.id = cbId;
-    cb.className = 'phase-checkbox';
-    // Partono deselezionati, lo stato reale viene imposto da applyProgress subito dopo il fetch
-    cb.checked = false; 
-
-    cb.addEventListener('change', () => {
-      const d = loadData();
-      d.progress[cbId] = cb.checked;
-      saveData(d);
-      updateAll();
-    });
-
-    li.insertBefore(cb, li.firstChild);
+    cb.checked = !!progressData[cb.id];
   });
 }
 
@@ -178,7 +77,7 @@ function updateProgress() {
 
   const list = document.getElementById('phaseProgressList');
   list.innerHTML = '';
-  phaseStats.forEach((s, i) => {
+  phaseStats.forEach(s => {
     const item = document.createElement('div');
     item.className = 'phase-progress-item';
     item.innerHTML = `
@@ -196,29 +95,28 @@ function updateProgress() {
 // ===== VELOCITY DASHBOARD =====
 function updatePlannedVsActual(stats) {
   const { totalDone, totalAll, totalPct } = stats;
-  const data = loadData();
   const container = document.getElementById('plannedVsActualBox');
 
-  if (!data.startDate) {
+  if (!appData.startDate) {
     container.innerHTML = `
       <div class="pva-header">
         <div class="pva-title">&#9881; Velocità progressi & Fine Stimata</div>
         <div class="pva-status" id="pvaStatus">—</div>
       </div>
       <div class="pva-note" id="pvaNote">
-        Imposta la data di inizio con il pulsante "Data Inizio" per attivare le stime di completamento.
+        Data di inizio non impostata nel JSON.
       </div>`;
     return;
   }
 
-  const start       = new Date(data.startDate);
+  const start       = new Date(appData.startDate);
   const today       = new Date();
   today.setHours(0,0,0,0);
   start.setHours(0,0,0,0);
   const daysElapsed = Math.max(1, Math.floor((today - start) / 86400000) + 1);
   const tasksRemaining = totalAll - totalDone;
 
-  const velocity = totalDone / daysElapsed; 
+  const velocity = totalDone / daysElapsed;
   const daysNeeded = velocity > 0 ? Math.ceil(tasksRemaining / velocity) : null;
 
   let estEndDate = null;
@@ -256,7 +154,6 @@ function updatePlannedVsActual(stats) {
   const requiredVelocity = totalAll / TOTAL_DAYS;
   const velocityRatio    = velocity > 0 ? (velocity / requiredVelocity * 100).toFixed(0) : 0;
   const velocityColor    = velocity >= requiredVelocity ? '#52D48A' : velocity >= requiredVelocity * 0.8 ? '#F4C553' : '#FF6B7A';
-
   const pct = totalAll > 0 ? Math.round(totalDone / totalAll * 100) : 0;
 
   container.innerHTML = `
@@ -315,7 +212,6 @@ function updatePlannedVsActual(stats) {
 
 // ===== GANTT CHART =====
 function renderGantt() {
-  const data = loadData();
   const inner = document.getElementById('ganttInner');
 
   const dayTaskMap = {};
@@ -333,9 +229,9 @@ function renderGantt() {
 
   let todayDay = null;
   const todayLeg = document.getElementById('todayLegend');
-  if (data.startDate) {
-    const s = new Date(data.startDate); s.setHours(0,0,0,0);
-    const t = new Date();               t.setHours(0,0,0,0);
+  if (appData.startDate) {
+    const s = new Date(appData.startDate); s.setHours(0,0,0,0);
+    const t = new Date();                  t.setHours(0,0,0,0);
     todayDay = Math.max(1, Math.floor((t - s) / 86400000) + 1);
     todayLeg.style.display = todayDay <= TOTAL_DAYS ? '' : 'none';
   } else {
@@ -348,12 +244,10 @@ function renderGantt() {
     Object.values(dayTaskMap).forEach(d => { totalDone += d.done; totalAll += d.total; });
     const velocity = totalDone / todayDay;
     const remaining = totalAll - totalDone;
-    if (velocity > 0) {
-      estEndDay = todayDay + Math.ceil(remaining / velocity);
-    }
+    if (velocity > 0) estEndDay = todayDay + Math.ceil(remaining / velocity);
   }
 
-  const DAY_W   = 6;    
+  const DAY_W   = 6;
   const ROW_H   = 34;
   const LABEL_W = 108;
   const AXIS_H  = 28;
@@ -382,7 +276,7 @@ function renderGantt() {
     for (let d = ph.start; d <= ph.end; d++) {
       const info = dayTaskMap[d];
       const barX = LABEL_W + (d - 1) * DAY_W;
-      const bW   = DAY_W - 1; 
+      const bW   = DAY_W - 1;
 
       if (!info || info.total === 0) {
         html += `<div class="gantt-day-cell gantt-day-empty" style="left:${barX}px;top:${barTop}px;width:${bW}px;height:${barH}px;"></div>`;
@@ -394,25 +288,19 @@ function renderGantt() {
       const allDone  = info.done === info.total;
       const someDone = info.done > 0 && !allDone;
       const notDone  = info.done === 0;
+      const tooltip  = `Giorno ${d}: ${info.done}/${info.total} task`;
 
-      let cellClass, fillColor, tooltip;
-      tooltip = `Giorno ${d}: ${info.done}/${info.total} task`;
-
+      let cellClass, fillColor;
       if (allDone) {
-        cellClass = 'gantt-day-done';
-        fillColor = ph.color;
+        cellClass = 'gantt-day-done';       fillColor = ph.color;
       } else if (someDone) {
-        cellClass = 'gantt-day-partial';
-        fillColor = ph.color + '99';
+        cellClass = 'gantt-day-partial';    fillColor = ph.color + '99';
       } else if (isToday) {
-        cellClass = 'gantt-day-today-cell';
-        fillColor = 'var(--gold)';
+        cellClass = 'gantt-day-today-cell'; fillColor = 'var(--gold)';
       } else if (isPast && notDone) {
-        cellClass = 'gantt-day-overdue';
-        fillColor = 'var(--rose)';
+        cellClass = 'gantt-day-overdue';    fillColor = 'var(--rose)';
       } else {
-        cellClass = 'gantt-day-future';
-        fillColor = ph.color + '28';
+        cellClass = 'gantt-day-future';     fillColor = ph.color + '28';
       }
 
       html += `<div class="${cellClass}" title="${tooltip}" style="left:${barX}px;top:${barTop}px;width:${bW}px;height:${barH}px;background:${fillColor};"></div>`;
@@ -423,10 +311,9 @@ function renderGantt() {
       }
     }
 
-    const allBoxes = document.querySelectorAll(`.${ph.id} .phase-checkbox`);
-    const phaseDone  = [...allBoxes].filter(c=>c.checked).length;
-    const phaseTotal = allBoxes.length;
-    const phasePct   = phaseTotal > 0 ? Math.round(phaseDone/phaseTotal*100) : 0;
+    const allBoxes  = document.querySelectorAll(`.${ph.id} .phase-checkbox`);
+    const phaseDone = [...allBoxes].filter(c => c.checked).length;
+    const phasePct  = allBoxes.length > 0 ? Math.round(phaseDone / allBoxes.length * 100) : 0;
     if (ghostW > 28) {
       html += `<div class="gantt-phase-pct" style="left:${ghostX + ghostW + 2}px;top:${barTop + 2}px;color:${ph.color};">${phasePct}%</div>`;
     }
@@ -439,10 +326,10 @@ function renderGantt() {
   }
 
   if (estEndDay && estEndDay !== todayDay) {
-    const ex = LABEL_W + (estEndDay - 0.5) * DAY_W;
+    const ex        = LABEL_W + (estEndDay - 0.5) * DAY_W;
     const clampedEx = Math.min(ex, totalW - 4);
-    const isLate = estEndDay > TOTAL_DAYS;
-    const estColor = isLate ? 'var(--rose)' : 'var(--green)';
+    const isLate    = estEndDay > TOTAL_DAYS;
+    const estColor  = isLate ? 'var(--rose)' : 'var(--green)';
     html += `<div class="gantt-est-line" style="left:${clampedEx}px;top:0;height:${totalH - AXIS_H}px;background:${estColor};"></div>`;
     html += `<div class="gantt-est-label" style="left:${clampedEx}px;top:${totalH - AXIS_H + 6}px;color:${estColor};">stima</div>`;
   }
@@ -453,8 +340,7 @@ function renderGantt() {
   const legEst = document.getElementById('estEndLegend');
   if (legEst && estEndDay) {
     legEst.style.display = '';
-    const isLate = estEndDay > TOTAL_DAYS;
-    legEst.querySelector('.gantt-leg-dot').style.background = isLate ? 'var(--rose)' : 'var(--green)';
+    legEst.querySelector('.gantt-leg-dot').style.background = estEndDay > TOTAL_DAYS ? 'var(--rose)' : 'var(--green)';
   }
 }
 
@@ -470,14 +356,9 @@ function toggle(id) {
   document.getElementById(id)?.classList.toggle('open');
 }
 
-// ===== INIT =====
+// ===== BOOT =====
 document.addEventListener('DOMContentLoaded', () => {
-  // Avvia il flusso asincrono che impone i dati scaricati da GitHub
   inizializzaApplicazione();
-
-  document.getElementById('exportBtn').addEventListener('click', exportJSON);
-  document.getElementById('importBtn').addEventListener('click', importJSON);
-
-  // Keep a choosen phase open // CAMBIARE FASE QUI
+  // Keep a chosen phase open — CAMBIARE FASE QUI
   document.getElementById('ph3')?.classList.add('open');
 });
