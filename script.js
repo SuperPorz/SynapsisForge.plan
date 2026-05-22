@@ -26,35 +26,37 @@ function saveData(data) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
 }
 
-// ===== ASYNC INITIALIZATION & FETCH =====
+// ===== ALWAYS FETCH FROM REPO =====
 async function inizializzaApplicazione() {
-  // 1. Inizializza la struttura dei checkbox nel DOM
-  initCheckboxes();
+  try {
+    // 1. Generiamo i checkbox nel DOM
+    initCheckboxes();
 
-  // 2. Controllo se esistono già dati nel localStorage
-  let localData = localStorage.getItem(STORAGE_KEY);
-  
-  if (!localData) {
-    console.log("Nessun dato locale trovato. Tento il fetch del JSON statico dalla repo...");
-    try {
-      // Fetch del file JSON relativo con cache-buster per evitare letture obsolete dal browser
-      const response = await fetch(`./progress_default.json?t=${new Date().getTime()}`); 
-      if (!response.ok) throw new Error('File JSON di default non trovato sul server');
-      
-      const repoData = await response.json();
-      
-      // Salviamo i dati recuperati nel localStorage per renderli persistenti
-      saveData(repoData);
-      console.log("Dati della repo sincronizzati nel localStorage con successo.");
-    } catch (error) {
-      console.error("Impossibile caricare il JSON iniziale:", error);
-    }
+    console.log("Fetch forzato del JSON dalla repository in corso...");
+    
+    // 2. Fetch sempre attivo con cache-buster per avere i dati in tempo reale ad ogni refresh
+    const response = await fetch(`./progress_default.json?t=${new Date().getTime()}`); 
+    if (!response.ok) throw new Error('File JSON non trovato sul server');
+    
+    const repoData = await response.json();
+    
+    // 3. Salviamo comunque nel localStorage come backup temporaneo per le funzioni interne dello script
+    saveData(repoData);
+
+    // 4. Applichiamo i dati del server ai checkbox del DOM
+    applyProgress(repoData.progress);
+    
+    // 5. Renderizziamo la dashboard e il Gantt
+    updateAll();
+    console.log("Applicazione sincronizzata con successo con il JSON della repo.");
+
+  } catch (error) {
+    console.error("Errore durante il fetch dal server, provo il recupero locale:", error);
+    // Fallback: se GitHub è giù o l'utente è offline, carica i vecchi dati locali (se presenti)
+    const backupData = loadData();
+    applyProgress(backupData.progress);
+    updateAll();
   }
-
-  // 3. Applica lo stato attuale dei progressi ai checkbox e aggiorna i grafici (Dashboard + Gantt)
-  const currentData = loadData();
-  applyProgress(currentData.progress);
-  updateAll();
 }
 
 // ===== IMPORT / EXPORT =====
@@ -70,6 +72,7 @@ function exportJSON() {
   URL.revokeObjectURL(a.href);
 }
 
+// L'importazione manuale sovrascrive temporaneamente il localStorage per la sessione corrente
 function importJSON() {
   const input = document.createElement('input');
   input.type = 'file';
@@ -113,10 +116,10 @@ function collectProgress() {
   return progress;
 }
 
-// Corretta l'assegnazione dello stato: se la chiave non esiste nel JSON, il checkbox resta deselezionato
 function applyProgress(progressData) {
+  if (!progressData) return;
   document.querySelectorAll('.phase-checkbox').forEach(cb => {
-    if (progressData && progressData.hasOwnProperty(cb.id)) {
+    if (progressData.hasOwnProperty(cb.id)) {
       cb.checked = !!progressData[cb.id];
     } else {
       cb.checked = false;
@@ -125,7 +128,6 @@ function applyProgress(progressData) {
 }
 
 function initCheckboxes() {
-  const data = loadData();
   document.querySelectorAll('.day-tasks li').forEach((li, globalIdx) => {
     let phaseId = '';
     for (let i = 0; i <= 9; i++) {
@@ -139,7 +141,8 @@ function initCheckboxes() {
     cb.type = 'checkbox';
     cb.id = cbId;
     cb.className = 'phase-checkbox';
-    cb.checked = !!(data.progress && data.progress[cbId]);
+    // Partono deselezionati, lo stato reale viene imposto da applyProgress subito dopo il fetch
+    cb.checked = false; 
 
     cb.addEventListener('change', () => {
       const d = loadData();
@@ -189,7 +192,7 @@ function updateProgress() {
   return { totalDone, totalAll, totalPct, phaseStats };
 }
 
-// ===== VELOCITY DASHBOARD (ex Planned vs Actual) =====
+// ===== VELOCITY DASHBOARD =====
 function updatePlannedVsActual(stats) {
   const { totalDone, totalAll, totalPct } = stats;
   const data = loadData();
@@ -461,14 +464,14 @@ function updateAll() {
   renderGantt();
 }
 
-// ===== TOGGLE (phase accordion) =====
+// ===== TOGGLE =====
 function toggle(id) {
   document.getElementById(id)?.classList.toggle('open');
 }
 
 // ===== INIT =====
 document.addEventListener('DOMContentLoaded', () => {
-  // Avvia l'inizializzazione asincrona che gestisce il fetch
+  // Avvia il flusso asincrono che impone i dati scaricati da GitHub
   inizializzaApplicazione();
 
   document.getElementById('exportBtn').addEventListener('click', exportJSON);
