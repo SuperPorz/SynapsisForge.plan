@@ -26,6 +26,37 @@ function saveData(data) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
 }
 
+// ===== ASYNC INITIALIZATION & FETCH =====
+async function inizializzaApplicazione() {
+  // 1. Inizializza la struttura dei checkbox nel DOM
+  initCheckboxes();
+
+  // 2. Controllo se esistono già dati nel localStorage
+  let localData = localStorage.getItem(STORAGE_KEY);
+  
+  if (!localData) {
+    console.log("Nessun dato locale trovato. Tento il fetch del JSON statico dalla repo...");
+    try {
+      // Fetch del file JSON relativo con cache-buster per evitare letture obsolete dal browser
+      const response = await fetch(`./progress_default.json?t=${new Date().getTime()}`); 
+      if (!response.ok) throw new Error('File JSON di default non trovato sul server');
+      
+      const repoData = await response.json();
+      
+      // Salviamo i dati recuperati nel localStorage per renderli persistenti
+      saveData(repoData);
+      console.log("Dati della repo sincronizzati nel localStorage con successo.");
+    } catch (error) {
+      console.error("Impossibile caricare il JSON iniziale:", error);
+    }
+  }
+
+  // 3. Applica lo stato attuale dei progressi ai checkbox e aggiorna i grafici (Dashboard + Gantt)
+  const currentData = loadData();
+  applyProgress(currentData.progress);
+  updateAll();
+}
+
 // ===== IMPORT / EXPORT =====
 function exportJSON() {
   const data = loadData();
@@ -50,7 +81,6 @@ function importJSON() {
     reader.onload = ev => {
       try {
         const data = JSON.parse(ev.target.result);
-        // Merge: keep structure, overwrite progress + startDate
         const current = loadData();
         current.progress = data.progress || {};
         if (data.startDate) current.startDate = data.startDate;
@@ -83,17 +113,20 @@ function collectProgress() {
   return progress;
 }
 
+// Corretta l'assegnazione dello stato: se la chiave non esiste nel JSON, il checkbox resta deselezionato
 function applyProgress(progressData) {
-  Object.entries(progressData || {}).forEach(([id, checked]) => {
-    const cb = document.getElementById(id);
-    if (cb) cb.checked = !!checked;
+  document.querySelectorAll('.phase-checkbox').forEach(cb => {
+    if (progressData && progressData.hasOwnProperty(cb.id)) {
+      cb.checked = !!progressData[cb.id];
+    } else {
+      cb.checked = false;
+    }
   });
 }
 
 function initCheckboxes() {
   const data = loadData();
   document.querySelectorAll('.day-tasks li').forEach((li, globalIdx) => {
-    // Find phase class
     let phaseId = '';
     for (let i = 0; i <= 9; i++) {
       const el = li.closest('.ph' + i);
@@ -139,7 +172,6 @@ function updateProgress() {
   document.getElementById('totalPercentage').textContent = totalPct;
   document.getElementById('totalProgressBar').style.width = totalPct + '%';
 
-  // Phase mini-bars
   const list = document.getElementById('phaseProgressList');
   list.innerHTML = '';
   phaseStats.forEach((s, i) => {
@@ -182,13 +214,9 @@ function updatePlannedVsActual(stats) {
   const daysElapsed = Math.max(1, Math.floor((today - start) / 86400000) + 1);
   const tasksRemaining = totalAll - totalDone;
 
-  // Velocity: task/giorno reale
-  const velocity = totalDone / daysElapsed; // task per giorno
-
-  // Giorni ancora necessari al ritmo attuale
+  const velocity = totalDone / daysElapsed; 
   const daysNeeded = velocity > 0 ? Math.ceil(tasksRemaining / velocity) : null;
 
-  // Data fine stimata
   let estEndDate = null;
   let estEndStr  = '—';
   if (daysNeeded !== null) {
@@ -197,12 +225,10 @@ function updatePlannedVsActual(stats) {
     estEndStr = estEndDate.toLocaleDateString('it-IT', { day:'2-digit', month:'short', year:'numeric' });
   }
 
-  // Data fine pianificata
   const plannedEnd = new Date(start);
   plannedEnd.setDate(plannedEnd.getDate() + TOTAL_DAYS - 1);
   const plannedEndStr = plannedEnd.toLocaleDateString('it-IT', { day:'2-digit', month:'short', year:'numeric' });
 
-  // Delta in giorni (stimata vs pianificata)
   let deltaStr = '—';
   let deltaColor = 'var(--gold)';
   let deltaIcon = '';
@@ -223,29 +249,25 @@ function updatePlannedVsActual(stats) {
     }
   }
 
-  // Burn rate vs required rate
   const requiredVelocity = totalAll / TOTAL_DAYS;
   const velocityRatio    = velocity > 0 ? (velocity / requiredVelocity * 100).toFixed(0) : 0;
   const velocityColor    = velocity >= requiredVelocity ? '#52D48A' : velocity >= requiredVelocity * 0.8 ? '#F4C553' : '#FF6B7A';
 
-  // % completato
   const pct = totalAll > 0 ? Math.round(totalDone / totalAll * 100) : 0;
 
   container.innerHTML = `
     <div class="pva-header">
-      <div class="pva-title">&#9881; Velocitò progressi + Fine Stimata</div>
+      <div class="pva-title">&#9881; Velocità progressi + Fine Stimata</div>
       <div class="pva-status" style="color:${deltaColor}">${deltaIcon} ${deltaStr}</div>
     </div>
 
     <div class="vel-grid">
-      <!-- Fine stimata — card principale -->
       <div class="vel-card vel-card-main">
         <div class="vel-card-label">Fine stimata</div>
         <div class="vel-card-value vel-end-date" style="color:${deltaColor}">${estEndStr}</div>
         <div class="vel-card-sub">Pianificata: ${plannedEndStr}</div>
       </div>
 
-      <!-- KPI secondari -->
       <div class="vel-kpi-group">
         <div class="vel-kpi">
           <div class="vel-kpi-label">Task completate</div>
@@ -267,7 +289,6 @@ function updatePlannedVsActual(stats) {
       </div>
     </div>
 
-    <!-- Burn bar: task completate vs rimanenti -->
     <div class="vel-burn-wrap">
       <div class="vel-burn-labels">
         <span style="color:var(--teal)">&#9632; completate ${pct}%</span>
@@ -288,13 +309,11 @@ function updatePlannedVsActual(stats) {
     </div>`;
 }
 
-// ===== GANTT CHART — Planned ghost + Real state primary =====
+// ===== GANTT CHART =====
 function renderGantt() {
   const data = loadData();
   const inner = document.getElementById('ganttInner');
 
-  // --- Build per-day stats ---
-  // dayTaskMap[dayNum] = { total, done, phaseIdx }
   const dayTaskMap = {};
   document.querySelectorAll('.phase-checkbox').forEach(cb => {
     const parts = cb.id.split('-task-');
@@ -308,7 +327,6 @@ function renderGantt() {
     if (cb.checked) dayTaskMap[dayNum].done++;
   });
 
-  // --- Today marker (in project days) ---
   let todayDay = null;
   const todayLeg = document.getElementById('todayLegend');
   if (data.startDate) {
@@ -320,8 +338,6 @@ function renderGantt() {
     todayLeg.style.display = 'none';
   }
 
-  // --- Estimated end line ---
-  // velocity = doneTasksTotal / daysElapsed → daysNeeded = remaining / velocity
   let estEndDay = null;
   if (todayDay && todayDay >= 1) {
     let totalDone = 0, totalAll = 0;
@@ -333,7 +349,7 @@ function renderGantt() {
     }
   }
 
-  const DAY_W   = 6;    // px per day — wider for better readability
+  const DAY_W   = 6;    
   const ROW_H   = 34;
   const LABEL_W = 108;
   const AXIS_H  = 28;
@@ -342,35 +358,29 @@ function renderGantt() {
 
   let html = `<div class="gantt-root" style="width:${totalW}px;height:${totalH}px;">`;
 
-  // ── Week grid lines ──
   for (let d = 1; d <= TOTAL_DAYS; d += 7) {
     const x = LABEL_W + (d - 1) * DAY_W;
     html += `<div class="gantt-tick" style="left:${x}px;height:${totalH}px;"></div>`;
     html += `<div class="gantt-tick-label" style="left:${x + 2}px;top:${totalH - AXIS_H + 6}px;">G${d}</div>`;
   }
 
-  // ── Phase rows ──
   PHASE_SCHEDULE.forEach((ph, i) => {
     const rowTop = i * ROW_H;
     const barTop = rowTop + 5;
     const barH   = ROW_H - 10;
 
-    // Row label
     html += `<div class="gantt-row-label" style="top:${rowTop}px;width:${LABEL_W - 8}px;height:${ROW_H}px;">${ph.name}</div>`;
 
-    // ── LAYER 1 (ghost): planned phase span ──
     const ghostX = LABEL_W + (ph.start - 1) * DAY_W;
     const ghostW = (ph.end - ph.start + 1) * DAY_W;
     html += `<div class="gantt-ghost-bar" style="left:${ghostX}px;top:${barTop}px;width:${ghostW}px;height:${barH}px;border-color:${ph.color}30;"></div>`;
 
-    // ── LAYER 2 (primary): per-day actual state bars ──
     for (let d = ph.start; d <= ph.end; d++) {
       const info = dayTaskMap[d];
       const barX = LABEL_W + (d - 1) * DAY_W;
-      const bW   = DAY_W - 1; // 1px gap between day cells
+      const bW   = DAY_W - 1; 
 
       if (!info || info.total === 0) {
-        // No tasks on this day (shouldn't happen but guard)
         html += `<div class="gantt-day-cell gantt-day-empty" style="left:${barX}px;top:${barTop}px;width:${bW}px;height:${barH}px;"></div>`;
         continue;
       }
@@ -385,37 +395,30 @@ function renderGantt() {
       tooltip = `Giorno ${d}: ${info.done}/${info.total} task`;
 
       if (allDone) {
-        // Completed: solid phase color
         cellClass = 'gantt-day-done';
         fillColor = ph.color;
       } else if (someDone) {
-        // Partial
         cellClass = 'gantt-day-partial';
         fillColor = ph.color + '99';
       } else if (isToday) {
-        // Today, not started
         cellClass = 'gantt-day-today-cell';
         fillColor = 'var(--gold)';
       } else if (isPast && notDone) {
-        // Overdue
         cellClass = 'gantt-day-overdue';
         fillColor = 'var(--rose)';
       } else {
-        // Future planned
         cellClass = 'gantt-day-future';
         fillColor = ph.color + '28';
       }
 
       html += `<div class="${cellClass}" title="${tooltip}" style="left:${barX}px;top:${barTop}px;width:${bW}px;height:${barH}px;background:${fillColor};"></div>`;
 
-      // Partial fill overlay for someDone
       if (someDone) {
         const partH = Math.round(barH * info.done / info.total);
         html += `<div class="gantt-day-partial-fill" style="left:${barX}px;top:${barTop + barH - partH}px;width:${bW}px;height:${partH}px;background:${ph.color};"></div>`;
       }
     }
 
-    // Phase % label at end of bar
     const allBoxes = document.querySelectorAll(`.${ph.id} .phase-checkbox`);
     const phaseDone  = [...allBoxes].filter(c=>c.checked).length;
     const phaseTotal = allBoxes.length;
@@ -425,14 +428,12 @@ function renderGantt() {
     }
   });
 
-  // ── Today line ──
   if (todayDay && todayDay <= TOTAL_DAYS + 10) {
     const tx = LABEL_W + (todayDay - 0.5) * DAY_W;
     html += `<div class="gantt-today" style="left:${tx}px;top:0;height:${totalH - AXIS_H}px;"></div>`;
     html += `<div class="gantt-today-label" style="left:${tx}px;top:${totalH - AXIS_H + 6}px;">oggi</div>`;
   }
 
-  // ── Estimated end line ──
   if (estEndDay && estEndDay !== todayDay) {
     const ex = LABEL_W + (estEndDay - 0.5) * DAY_W;
     const clampedEx = Math.min(ex, totalW - 4);
@@ -445,7 +446,6 @@ function renderGantt() {
   html += '</div>';
   inner.innerHTML = html;
 
-  // ── Update legend ──
   const legEst = document.getElementById('estEndLegend');
   if (legEst && estEndDay) {
     legEst.style.display = '';
@@ -468,12 +468,11 @@ function toggle(id) {
 
 // ===== INIT =====
 document.addEventListener('DOMContentLoaded', () => {
-  initCheckboxes();
+  // Avvia l'inizializzazione asincrona che gestisce il fetch
+  inizializzaApplicazione();
 
   document.getElementById('exportBtn').addEventListener('click', exportJSON);
   document.getElementById('importBtn').addEventListener('click', importJSON);
-
-  updateAll();
 
   // Keep a choosen phase open // CAMBIARE FASE QUI
   document.getElementById('ph3')?.classList.add('open');
