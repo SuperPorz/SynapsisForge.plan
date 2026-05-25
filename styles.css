@@ -86,6 +86,12 @@ body::before {
 .phase-progress-bar-fill { height: 100%; background: var(--teal); width: 0%; transition: width 0.3s ease; }
 .phase-progress-value { font-family: 'Syne', sans-serif; font-size: 12px; font-weight: 600; color: var(--gold); }
 
+/* EXPORT BUTTON */
+.action-btn { display:inline-flex; align-items:center; gap:6px; padding:8px 16px; border-radius:8px; border:1px solid; font-size:11px; font-weight:600; letter-spacing:0.06em; cursor:pointer; transition:opacity .15s,transform .15s; }
+.action-btn:hover { opacity:0.85; transform:translateY(-1px); }
+.action-btn:active { transform:translateY(0); }
+.action-btn-export { background:rgba(244,197,83,0.1); color:var(--gold); border-color:rgba(244,197,83,0.3); }
+
 /* PLANNED VS ACTUAL BOX → VELOCITY DASHBOARD */
 .pva-box {
   padding: 24px;
