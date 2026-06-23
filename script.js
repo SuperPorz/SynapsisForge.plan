@@ -1,17 +1,17 @@
 // ===== CONSTANTS =====
 const PHASE_SCHEDULE = [
-  { id:'ph0', name:'01 Setup/TS/DB',   start:1,   end:7,   color:'#9B7CF4' },
-  { id:'ph1', name:'02 NestJS Core',   start:8,   end:24,  color:'#3DD6C8' },
-  { id:'ph2', name:'03 Auth',          start:25,  end:35,  color:'#FF6B7A' },
-  { id:'ph3', name:'04 Angular',       start:36,  end:56,  color:'#4A9EFF' },
-  { id:'ph4', name:'05 Redis',         start:57,  end:66,  color:'#52D48A' },
-  { id:'ph5', name:'06 BullMQ',        start:67,  end:77,  color:'#FF9F4A' },
-  { id:'ph6', name:'07 Pagamenti',     start:78,  end:88,  color:'#4AC8FF' },
-  { id:'ph7', name:'08 AWS/Deploy',    start:89,  end:100, color:'#F4C553' },
-  { id:'ph8', name:'09 Testing/Sec',   start:101, end:111, color:'#4A9EFF' },
-  { id:'ph9', name:'10 Portfolio',     start:112, end:125, color:'#9B7CF4' }
+  { id:'ph0', name:'01 Setup/TS/DB',   start:1, end:7,   color:'#9B7CF4' },
+  { id:'ph1', name:'02 NestJS Core',   start:8, end:24,  color:'#3DD6C8' },
+  { id:'ph2', name:'03 Auth',          start:25, end:35,  color:'#FF6B7A' },
+  { id:'ph3', name:'04 Angular',       start:36, end:55,  color:'#4A9EFF' },
+  { id:'ph4', name:'05 Redis',         start:56, end:65,  color:'#52D48A' },
+  { id:'ph5', name:'06 BullMQ',        start:66, end:76,  color:'#FF9F4A' },
+  { id:'ph6', name:'07 Pagamenti',     start:77, end:87,  color:'#4AC8FF' },
+  { id:'ph7', name:'08 AWS/Deploy',    start:88, end:99, color:'#F4C553' },
+  { id:'ph8', name:'09 Testing/Sec',   start:100, end:110, color:'#4A9EFF' },
+  { id:'ph9', name:'10 Portfolio',     start:111, end:124, color:'#9B7CF4' }
 ];
-const TOTAL_DAYS = 125;
+const TOTAL_DAYS = 124;
 const RAW_URL = 'https://raw.githubusercontent.com/SuperPorz/SynapsisForge.plan/main/progress_default.json';
 
 // ===== APP STATE =====
