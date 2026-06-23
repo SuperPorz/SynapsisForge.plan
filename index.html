@@ -592,7 +592,7 @@
       <div class="phase-num">04</div>
       <div class="phase-info">
         <div class="phase-name">Angular — SPA, PWA, Routing, Auth Client, UI</div>
-        <div class="phase-meta"><span class="phase-days">Giorni 36–60 · 25 giorni</span><span class="badge build"><span class="badge-dot"></span>Implementazione</span></div>
+        <div class="phase-meta"><span class="phase-days">Giorni 36–56 · 21 giorni</span><span class="badge build"><span class="badge-dot"></span>Implementazione</span></div>
         <div class="phase-color-bar"></div>
       </div>
       <div class="phase-toggle">▾</div>
@@ -836,18 +836,7 @@
             </ul>
           </div>
         </div>
-        <div class="day-row">
-          <div class="day-num-col"><span class="day-label">giorno</span><span class="day-number">55</span><span class="day-type-dot" style="background:var(--blue)"></span></div>
-          <div class="day-content-col">
-            <div class="day-title">Lighthouse audit & performance fix</div>
-            <ul class="day-tasks">
-              <li>Esegui Lighthouse su ogni pagina principale: punta a Performance >85, PWA 100, Accessibility >90</li>
-              <li>Fix comuni: lazy loading immagini (<strong>loading="lazy"</strong>), compressione bundle, defer script non critici</li>
-              <li>Aggiungi <strong>@defer</strong> block di Angular 17 per i componenti pesanti (editor, chart)</li>
-              <li>Verifica che il bundle produzione sia <1 MB gzippato</li>
-            </ul>
-          </div>
-        </div>
+        <!-- Day 55 → spostato in Phase 10 (Giorno 119) -->
         <div class="day-row">
           <div class="day-num-col"><span class="day-label">giorno</span><span class="day-number">56</span><span class="day-type-dot" style="background:var(--gold)"></span></div>
           <div class="day-content-col">
@@ -1759,12 +1748,14 @@
         <div class="day-row">
           <div class="day-num-col"><span class="day-label">giorno</span><span class="day-number">119</span><span class="day-type-dot" style="background:var(--green)"></span></div>
           <div class="day-content-col">
-            <div class="day-title">Performance finale — Lighthouse e bundle</div>
+            <div class="day-title">Performance finale — Lighthouse e bundle <span style="font-size:0.7em;color:var(--muted);font-weight:400;">(fuso con Giorno 55)</span></div>
             <ul class="day-tasks">
-              <li>Lighthouse su homepage, catalogo, player: punta a Performance >85, Accessibility >90, Best Practices 100</li>
+              <li>Lighthouse su homepage, catalogo, dettaglio, player, dashboard, auth, admin: Performance >85, PWA 100, Accessibility >90</li>
+              <li>Fix comuni: <strong>loading="lazy"</strong> su immagini sotto la piega, compressione gzip/brotli, WebP</li>
+              <li>Aggiungi <strong>@defer</strong> block per componenti pesanti (chart, course-card grids, admin panels)</li>
               <li>Analizza il bundle Angular con <strong>npx source-map-explorer dist/frontend/**/*.js</strong></li>
-              <li>Fix: rimuovi le dipendenze inutilizzate, usa import specifici invece di import barrel</li>
-              <li>Verifica che il bundle JS principale sia <500 KB gzippato</li>
+              <li>Rimuovi dipendenze inutilizzate, import specifici invece di barrel</li>
+              <li>Verifica bundle JS principale <500 KB gzippato e <strong>ngsw-config.json</strong> serve asset correttamente</li>
             </ul>
           </div>
         </div>
