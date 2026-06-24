@@ -72,12 +72,12 @@
   </div>
 
   <div class="stats">
-    <div class="stat"><div class="stat-label">Giorni totali</div><div class="stat-value">124</div><div class="stat-unit">~3 mesi</div></div>
-    <div class="stat"><div class="stat-label">Ore totali</div><div class="stat-value">~500</div><div class="stat-unit">a 4h/giorno</div></div>
+    <div class="stat"><div class="stat-label">Giorni totali</div><div class="stat-value">119</div><div class="stat-unit">~3 mesi</div></div>
+    <div class="stat"><div class="stat-label">Ore totali</div><div class="stat-value">~480</div><div class="stat-unit">a 4h/giorno</div></div>
     <div class="stat"><div class="stat-label">Fasi</div><div class="stat-value">10</div><div class="stat-unit">01–10</div></div>
     <div class="stat"><div class="stat-label">Mese 1</div><div class="stat-value">G 1–55</div><div class="stat-unit">Core features</div></div>
-    <div class="stat"><div class="stat-label">Mese 2</div><div class="stat-value">G 56–99</div><div class="stat-unit">Redis·Jobs·Pay·Deploy</div></div>
-    <div class="stat"><div class="stat-label">Mese 3</div><div class="stat-value">G 100–124</div><div class="stat-unit">Test·Security·Portfolio</div></div>
+    <div class="stat"><div class="stat-label">Mese 2</div><div class="stat-value">G 56–94</div><div class="stat-unit">Redis·Jobs·Pay·Deploy</div></div>
+    <div class="stat"><div class="stat-label">Mese 3</div><div class="stat-value">G 95–119</div><div class="stat-unit">Test·Security·Portfolio</div></div>
   </div>
 
   <div class="legend">
@@ -1004,7 +1004,7 @@
       <div class="phase-num">06</div>
       <div class="phase-info">
         <div class="phase-name">BullMQ — Job Queue, Workers & Task Asincroni</div>
-        <div class="phase-meta"><span class="phase-days">Giorni 66–76 · 11 giorni</span><span class="badge build"><span class="badge-dot"></span>Implementazione</span></div>
+        <div class="phase-meta"><span class="phase-days">Giorni 66–71 · 6 giorni</span><span class="badge build"><span class="badge-dot"></span>Implementazione</span></div>
         <div class="phase-color-bar"></div>
       </div>
       <div class="phase-toggle">▾</div>
@@ -1025,19 +1025,20 @@
             <ul class="day-tasks">
               <li><strong>Studia (1.5h):</strong> architettura Producer-Broker-Consumer, differenza tra job e worker, concetto di coda FIFO, retry policy</li>
               <li>Installa <strong>@nestjs/bullmq bullmq</strong> e configura <strong>BullModule.forRoot()</strong> con la connessione Redis</li>
-              <li>Crea il primo modulo con una coda: <strong>BullModule.registerQueue({ name: "email" })</strong></li>
-              <li>Scrivi un job semplice <strong>test-job</strong> che stampa in console — verifica l'esecuzione</li>
+              <li>Crea il modulo <strong>modules/queues/</strong> con una coda e un processor</li>
+              <li>Scrivi un job di test che stampa in console — endpoint che aggiunge il job, worker lo esegue</li>
             </ul>
           </div>
         </div>
         <div class="day-row">
           <div class="day-num-col"><span class="day-label">giorno</span><span class="day-number">67</span><span class="day-type-dot" style="background:var(--orange)"></span></div>
           <div class="day-content-col">
-            <div class="day-title">Email system — Nodemailer + Mailgun</div>
+            <div class="day-title">Email system — Nodemailer + SMTP</div>
             <ul class="day-tasks">
-              <li>Configura <strong>@nestjs-modules/mailer</strong> con Nodemailer e il provider <strong>Mailgun</strong> (free tier: 5000 email/mese)</li>
-              <li>Crea template HTML con Handlebars: <strong>welcome.hbs</strong>, <strong>enrollment-confirm.hbs</strong>, <strong>certificate-ready.hbs</strong></li>
-              <li>Testa l'invio di una email di test in sandbox Mailgun e verifica il template</li>
+              <li>Installa <strong>@nestjs-modules/mailer</strong> + <strong>nodemailer</strong> + <strong>handlebars</strong></li>
+              <li>Configura MailerModule con SMTP (Gmail/ProtonMail con password app)</li>
+              <li>Crea template HTML Handlebars: <strong>welcome.hbs</strong>, <strong>enrollment-confirm.hbs</strong></li>
+              <li>Testa l'invio di una email di test da un endpoint</li>
             </ul>
           </div>
         </div>
@@ -1046,10 +1047,10 @@
           <div class="day-content-col">
             <div class="day-title">Job — welcome email & enrollment confirmation</div>
             <ul class="day-tasks">
-              <li>Job <strong>send-welcome-email</strong>: triggered alla registrazione, retry 3 volte con backoff 30s/90s/270s</li>
-              <li>Job <strong>send-enrollment-confirmation</strong>: triggered all'iscrizione o al pagamento riuscito</li>
-              <li>Configura il Processor con <strong>concurrency: 3</strong> — processa 3 email in parallelo</li>
-              <li>Testa registrando un nuovo utente e verificando l'email ricevuta</li>
+              <li>Job <strong>send-welcome-email</strong>: triggered su <strong>user.registered</strong> via EventEmitter</li>
+              <li>Job <strong>send-enrollment-confirmation</strong>: triggered su <strong>enrollment.created</strong></li>
+              <li>Configura il Processor con <strong>concurrency: 3</strong></li>
+              <li>Test E2E: registrazione → email arriva, iscrizione → email arriva</li>
             </ul>
           </div>
         </div>
@@ -1058,96 +1059,37 @@
           <div class="day-content-col">
             <div class="day-title">Job — generazione certificati PDF</div>
             <ul class="day-tasks">
-              <li>Job <strong>generate-certificate</strong>: triggered dall'evento <strong>enrollment.completed</strong></li>
-              <li>Usa <strong>pdfkit</strong> per generare il PDF: nome studente, corso, data, UUID di verifica, QR code con <strong>qrcode</strong></li>
-              <li>Salva il PDF nella cartella <strong>uploads/certificates/</strong> (migrerai su S3 nella Fase 08)</li>
-              <li>Aggiorna il record Certificate nel DB con il path e l'URL di download</li>
+              <li>Installa <strong>pdfkit</strong></li>
+              <li>Job <strong>generate-certificate</strong>: triggered su <strong>enrollment.completed</strong></li>
+              <li>Genera PDF con: nome studente, titolo corso, data completamento</li>
+              <li>Salva in <strong>uploads/certificates/</strong>, aggiorna record Certificate con PDF URL</li>
             </ul>
           </div>
         </div>
         <div class="day-row">
           <div class="day-num-col"><span class="day-label">giorno</span><span class="day-number">70</span><span class="day-type-dot" style="background:var(--orange)"></span></div>
           <div class="day-content-col">
-            <div class="day-title">Job — digest giornaliero studenti</div>
+            <div class="day-title">Scheduled jobs + Bull Board</div>
             <ul class="day-tasks">
-              <li>Job schedulato cron <strong>0 9 * * *</strong>: invia agli studenti con corsi attivi il riassunto giornaliero</li>
-              <li>Contenuto: prossima lezione suggerita, streak di studio (giorni consecutivi), percentuale completamento</li>
-              <li>Configura con <strong>BullModule</strong> e job repeatble: <strong>repeat: { pattern: "0 9 * * *" }</strong></li>
-              <li>Testa triggando manualmente il job dall'endpoint admin</li>
+              <li>Installa <strong>@bull-board/nestjs</strong>, monta su <strong>/admin/queues</strong> (solo admin)</li>
+              <li>Job <strong>daily-student-digest</strong>: cron <strong>0 9 * * *</strong> (prossima lezione, streak studio)</li>
+              <li>Job <strong>cleanup-expired-tokens</strong>: cron <strong>0 3 * * 0</strong> (manutenzione settimanale)</li>
+              <li>Test: trigger manuale dei job da Bull Board</li>
             </ul>
           </div>
         </div>
         <div class="day-row">
-          <div class="day-num-col"><span class="day-label">giorno</span><span class="day-number">71</span><span class="day-type-dot" style="background:var(--orange)"></span></div>
+          <div class="day-num-col"><span class="day-label">giorno</span><span class="day-number">71</span><span class="day-type-dot" style="background:var(--gold)"></span></div>
           <div class="day-content-col">
-            <div class="day-title">Job — report settimanale instructor</div>
+            <div class="day-title">Retry policy & E2E test</div>
             <ul class="day-tasks">
-              <li>Job schedulato cron <strong>0 8 * * 1</strong> (ogni lunedì): genera report per ogni instructor con corsi pubblicati</li>
-              <li>Contenuto email: nuovi iscritti della settimana, revenue, lezione più vista, tasso di completamento</li>
-              <li>Aggiungi un endpoint admin <strong>POST /admin/jobs/trigger-instructor-report</strong> per triggare manualmente</li>
-              <li>Verifica che l'email arrivi con tutti i dati corretti</li>
+              <li>Configura retry policy per tipo job: email (3 tentativi, exponential backoff), PDF (2 tentativi)</li>
+              <li>Aggiungi handler <strong>onFailed</strong> per logging degli errori</li>
+              <li>Imposta <strong>defaultJobOptions</strong> con <strong>removeOnComplete</strong> per tenere Redis pulita</li>
+              <li>Verifica che tutti gli eventi dell'app triggerino i job corretti</li>
+              <li>Documenta architettura job in MEMORY.md</li>
             </ul>
-          </div>
-        </div>
-        <div class="day-row">
-          <div class="day-num-col"><span class="day-label">giorno</span><span class="day-number">72</span><span class="day-type-dot" style="background:var(--orange)"></span></div>
-          <div class="day-content-col">
-            <div class="day-title">Job — cleanup token e manutenzione</div>
-            <ul class="day-tasks">
-              <li>Job notturno cron <strong>0 3 * * *</strong>: pulizia chiavi Redis scadute e token di verifica email vecchi</li>
-              <li>Job <strong>cleanup-old-backups</strong>: elimina i PDF certificati generati più di 1 anno fa</li>
-              <li>Aggiungi <strong>Bull Board</strong> come dashboard web: installa <strong>@bull-board/nestjs</strong> su route <strong>/admin/queues</strong></li>
-              <li>Testa Bull Board: verifica che mostri job completati, falliti e in coda</li>
-            </ul>
-          </div>
-        </div>
-        <div class="day-row">
-          <div class="day-num-col"><span class="day-label">giorno</span><span class="day-number">73</span><span class="day-type-dot" style="background:var(--orange)"></span></div>
-          <div class="day-content-col">
-            <div class="day-title">Retry policy & dead letter queue</div>
-            <ul class="day-tasks">
-              <li>Configura retry dettagliato per ogni tipo di job: email (3 retry), PDF (2 retry), cleanup (1 retry)</li>
-              <li>Aggiungi un handler per <strong>onFailed</strong>: logga l'errore e invia una notifica all'admin se il job fallisce dopo tutti i retry</li>
-              <li>Simula un fallimento (disconnetti Mailgun) e verifica che il retry avvenga con i backoff corretti</li>
-              <li>Imposta un <strong>defaultJobOptions</strong> con <strong>removeOnComplete: 100</strong> per non accumulare job completati</li>
-            </ul>
-          </div>
-        </div>
-        <div class="day-row">
-          <div class="day-num-col"><span class="day-label">giorno</span><span class="day-number">74</span><span class="day-type-dot" style="background:var(--orange)"></span></div>
-          <div class="day-content-col">
-            <div class="day-title">Stress test delle code</div>
-            <ul class="day-tasks">
-              <li>Script Node.js: crea 100 iscrizioni in parallelo e verifica che tutti i job vengano accodati e processati</li>
-              <li>Monitora Bull Board durante il test: vedi la coda riempirsi e svuotarsi</li>
-              <li>Simula un crash del worker (kill del processo): verifica che i job non persi vengano ripresi al riavvio</li>
-              <li>Verifica che la concorrenza non crei duplicati (due certificati per lo stesso enrollment)</li>
-            </ul>
-          </div>
-        </div>
-        <div class="day-row">
-          <div class="day-num-col"><span class="day-label">giorno</span><span class="day-number">75</span><span class="day-type-dot" style="background:var(--orange)"></span></div>
-          <div class="day-content-col">
-            <div class="day-title">Integrazione job con gli eventi NestJS</div>
-            <ul class="day-tasks">
-              <li>Assicurati che TUTTI gli eventi applicativi triggino il job corretto via EventEmitter2</li>
-              <li>Mappa degli eventi: <strong>user.registered</strong> → welcome email, <strong>enrollment.created</strong> → confirmation email, <strong>enrollment.completed</strong> → generate certificate</li>
-              <li>Aggiungi logging strutturato su ogni job: <strong>jobId</strong>, <strong>jobName</strong>, <strong>duration</strong>, <strong>status</strong></li>
-              <li>Verifica il flusso completo: registrazione → iscrizione → completamento → certificato PDF ricevuto via email</li>
-            </ul>
-          </div>
-        </div>
-        <div class="day-row">
-          <div class="day-num-col"><span class="day-label">giorno</span><span class="day-number">76</span><span class="day-type-dot" style="background:var(--gold)"></span></div>
-          <div class="day-content-col">
-            <div class="day-title">BullMQ review</div>
-            <ul class="day-tasks">
-              <li>Revisiona tutti i job: sono idempotenti? (se un job viene eseguito due volte, il risultato è lo stesso?)</li>
-              <li>Verifica che i template email siano corretti: nessun link rotto, nessun dato undefined</li>
-              <li>Aggiungi metriche: endpoint <strong>GET /admin/jobs/stats</strong> con conteggio job completati/falliti per tipo</li>
-              <li>Documenta nel README tutti i job e le loro schedule</li>
-            </ul>
-            <div class="tip-box"><strong>🎯 Milestone:</strong> sistema asincrono completo. Email, PDF, report schedulati — tutto fuori dal ciclo HTTP.</div>
+            <div class="tip-box"><strong>🎯 Milestone:</strong> sistema asincrono completo. Email, PDF e job schedulati — tutto fuori dal ciclo HTTP.</div>
           </div>
         </div>
       </div>
@@ -1160,7 +1102,7 @@
       <div class="phase-num">07</div>
       <div class="phase-info">
         <div class="phase-name">Pagamenti — Braintree (Visa/Mastercard + PayPal)</div>
-        <div class="phase-meta"><span class="phase-days">Giorni 77–87 · 11 giorni</span><span class="badge build"><span class="badge-dot"></span>Implementazione</span></div>
+        <div class="phase-meta"><span class="phase-days">Giorni 72–82 · 11 giorni</span><span class="badge build"><span class="badge-dot"></span>Implementazione</span></div>
         <div class="phase-color-bar"></div>
       </div>
       <div class="phase-toggle">▾</div>
@@ -1319,7 +1261,7 @@
       <div class="phase-num">08</div>
       <div class="phase-info">
         <div class="phase-name">AWS S3, Deploy & CI/CD GitLab</div>
-        <div class="phase-meta"><span class="phase-days">Giorni 88–99 · 12 giorni</span><span class="badge devops"><span class="badge-dot"></span>Cloud / DevOps</span></div>
+        <div class="phase-meta"><span class="phase-days">Giorni 83–94 · 12 giorni</span><span class="badge devops"><span class="badge-dot"></span>Cloud / DevOps</span></div>
         <div class="phase-color-bar"></div>
       </div>
       <div class="phase-toggle">▾</div>

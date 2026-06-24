@@ -5,13 +5,13 @@ const PHASE_SCHEDULE = [
   { id:'ph2', name:'03 Auth',          start:25, end:35,  color:'#FF6B7A' },
   { id:'ph3', name:'04 Angular',       start:36, end:55,  color:'#4A9EFF' },
   { id:'ph4', name:'05 Redis',         start:56, end:65,  color:'#52D48A' },
-  { id:'ph5', name:'06 BullMQ',        start:66, end:76,  color:'#FF9F4A' },
-  { id:'ph6', name:'07 Pagamenti',     start:77, end:87,  color:'#4AC8FF' },
-  { id:'ph7', name:'08 AWS/Deploy',    start:88, end:99, color:'#F4C553' },
-  { id:'ph8', name:'09 Testing/Sec',   start:100, end:110, color:'#4A9EFF' },
-  { id:'ph9', name:'10 Portfolio',     start:111, end:124, color:'#9B7CF4' }
+  { id:'ph5', name:'06 BullMQ',        start:66, end:71,  color:'#FF9F4A' },
+  { id:'ph6', name:'07 Pagamenti',     start:72, end:82,  color:'#4AC8FF' },
+  { id:'ph7', name:'08 AWS/Deploy',    start:83, end:94, color:'#F4C553' },
+  { id:'ph8', name:'09 Testing/Sec',   start:95, end:105, color:'#4A9EFF' },
+  { id:'ph9', name:'10 Portfolio',     start:106, end:119, color:'#9B7CF4' }
 ];
-const TOTAL_DAYS = 124;
+const TOTAL_DAYS = 119;
 const RAW_URL = 'https://raw.githubusercontent.com/SuperPorz/SynapsisForge.plan/main/progress_default.json';
 
 // ===== APP STATE =====
@@ -380,5 +380,5 @@ function toggle(id) {
 document.addEventListener('DOMContentLoaded', () => {
   inizializzaApplicazione();
   // Keep a chosen phase open — CAMBIARE FASE QUI
-  document.getElementById('ph5')?.classList.add('open');
+  document.getElementById('ph5')?.classList.add('open'); // BullMQ phase
 });
