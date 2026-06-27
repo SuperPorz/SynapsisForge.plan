@@ -349,14 +349,14 @@
     "ph7-task-88-344": true,
     "ph7-task-88-345": true,
     "ph7-task-88-346": true,
-    "ph7-task-89-347": false,
-    "ph7-task-89-348": false,
-    "ph7-task-89-349": false,
-    "ph7-task-89-350": false,
-    "ph7-task-90-351": false,
-    "ph7-task-90-352": false,
-    "ph7-task-90-353": false,
-    "ph7-task-90-354": false,
+    "ph7-task-89-347": true,
+    "ph7-task-89-348": true,
+    "ph7-task-89-349": true,
+    "ph7-task-89-350": true,
+    "ph7-task-90-351": true,
+    "ph7-task-90-352": true,
+    "ph7-task-90-353": true,
+    "ph7-task-90-354": true,
     "ph7-task-91-355": false,
     "ph7-task-91-356": false,
     "ph7-task-91-357": false,
@@ -476,5 +476,5 @@
     "ph9-task-119-471": false,
     "ph9-task-119-472": false
   },
-  "exportedAt": "2026-06-26T22:24:30.357Z"
+  "exportedAt": "2026-06-27T01:15:51.507Z"
 }
