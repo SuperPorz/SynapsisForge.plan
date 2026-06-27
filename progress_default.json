@@ -361,10 +361,10 @@
     "ph7-task-91-356": true,
     "ph7-task-91-357": true,
     "ph7-task-91-358": true,
-    "ph7-task-92-359": false,
-    "ph7-task-92-360": false,
-    "ph7-task-92-361": false,
-    "ph7-task-92-362": false,
+    "ph7-task-92-359": true,
+    "ph7-task-92-360": true,
+    "ph7-task-92-361": true,
+    "ph7-task-92-362": true,
     "ph7-task-93-363": false,
     "ph7-task-93-364": false,
     "ph7-task-93-365": false,
@@ -476,5 +476,5 @@
     "ph9-task-119-471": false,
     "ph9-task-119-472": false
   },
-  "exportedAt": "2026-06-27T08:43:43.638Z"
+  "exportedAt": "2026-06-27T18:20:43.789Z"
 }
