@@ -380,5 +380,5 @@ function toggle(id) {
 document.addEventListener('DOMContentLoaded', () => {
   inizializzaApplicazione();
   // Keep a chosen phase open — CAMBIARE FASE QUI
-  document.getElementById('ph7')?.classList.add('open');
+  document.getElementById('ph8')?.classList.add('open');
 });
