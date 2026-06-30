@@ -21,13 +21,23 @@ let appData = { startDate: null, progress: {} };
 async function inizializzaApplicazione() {
   initCheckboxes();
   try {
-    const response = await fetch(`${RAW_URL}?t=${Date.now()}`);
-    if (!response.ok) throw new Error(`HTTP ${response.status}`);
-    appData = await response.json();
-    applyProgress(appData.progress);
-  } catch (error) {
-    console.error('Fetch JSON fallito:', error);
+    const local = await fetch(`progress_default.json?t=${Date.now()}`);
+    if (local.ok) {
+      appData = await local.json();
+    } else {
+      throw new Error(`HTTP ${local.status}`);
+    }
+  } catch (localError) {
+    console.warn('Local JSON fallito, provo GitHub:', localError);
+    try {
+      const remote = await fetch(`${RAW_URL}?t=${Date.now()}`);
+      if (!remote.ok) throw new Error(`HTTP ${remote.status}`);
+      appData = await remote.json();
+    } catch (remoteError) {
+      console.error('Anche GitHub fallito:', remoteError);
+    }
   }
+  applyProgress(appData.progress);
   updateAll();
 }
 
